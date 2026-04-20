@@ -103,7 +103,7 @@ final class TestRunner {
 
         const paths = ["./tests/fixtures/sample-a.pdf", "./tests/fixtures/sample-b.pdf"];
         const blobs = await Promise.all(paths.map((path) => fetch(path).then((response) => response.blob())));
-        const files = blobs.map((blob, index) => new File([blob], index === 0 ? "sample-a.pdf" : "sample-b.pdf", { type: "application/pdf" }));
+        const files = blobs.map((blob, index) => new File([blob], index === 0 ? "sample-a.pdf.pdf" : "sample-b.pdf.pdf", { type: "application/pdf" }));
 
         await window.onePdfApp.handleFiles(files);
 
@@ -128,6 +128,11 @@ final class TestRunner {
         const draggedDocumentId = fileCards[1].dataset.documentId;
         const targetDocumentId = fileCards[0].dataset.documentId;
         window.onePdfApp.reorderDocumentById(draggedDocumentId, targetDocumentId);
+
+        const firstCardTitle = document.querySelector('.file-card .file-name')?.textContent;
+        if (firstCardTitle !== 'sample-b.pdf') {
+          throw new Error(`Expected normalized visible file name, got ${firstCardTitle}`);
+        }
 
         const exportNameAfterReorder = document.querySelector('#export-filename')?.value;
         if (exportNameAfterReorder !== 'sample-b-merged') {

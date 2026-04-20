@@ -130,7 +130,7 @@ async function handleFiles(fileList) {
 
       state.documents.push({
         id: createDocumentId(),
-        name: file.name,
+        name: getNormalizedPdfDisplayName(file.name),
         size: file.size,
         bytes,
         pageCount,
@@ -417,7 +417,7 @@ function renderSelectionSummary() {
 function getNormalizedExportFilename() {
   const rawName = state.exportFilename.trim() || getSuggestedExportBaseName();
   const trimmed = rawName.trim();
-  const baseNameWithoutPdfSuffix = trimmed.replace(/(?:\.pdf)+$/i, "");
+  const baseNameWithoutPdfSuffix = getNormalizedPdfBaseName(trimmed);
   const safeBaseName = baseNameWithoutPdfSuffix
     .replace(/[\\/:*?"<>|]+/g, "-")
     .replace(/\s+/g, "-")
@@ -443,8 +443,25 @@ function getSuggestedExportBaseName() {
     return "one-pdf-merged";
   }
 
-  const originalName = firstDocument.name.replace(/\.pdf$/i, "");
+  const originalName = getNormalizedPdfBaseName(firstDocument.name);
   return `${originalName}-merged`;
+}
+
+function getNormalizedPdfDisplayName(fileName) {
+  const trimmed = fileName.trim();
+  if (!trimmed) {
+    return "document.pdf";
+  }
+
+  if (!/\.pdf(?:\.pdf)+$/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  return `${getNormalizedPdfBaseName(trimmed)}.pdf`;
+}
+
+function getNormalizedPdfBaseName(fileName) {
+  return fileName.trim().replace(/(?:\.pdf)+$/i, "");
 }
 
 function getSelectedPageNumbers(selections) {
