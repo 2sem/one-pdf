@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One PDF — Merge selected PDF pages</title>
+    <meta
+      name="description"
+      content="Merge only the PDF pages you want, directly in your browser."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Privacy-first PDF merge</p>
+          <h1>Pick pages. Merge once. Download instantly.</h1>
+          <p class="hero-body">
+            One PDF runs fully in your browser, so your files stay on your device while
+            you combine only the pages you want.
+          </p>
+          <div class="hero-badges" aria-label="Product highlights">
+            <span>No upload</span>
+            <span>Works on GitHub Pages</span>
+            <span>Multi-file merge</span>
+          </div>
+        </div>
+
+        <section class="dropzone-card" aria-labelledby="upload-title">
+          <div class="dropzone-panel" id="dropzone" tabindex="0" role="button">
+            <p class="panel-kicker">MVP</p>
+            <h2 id="upload-title">Select your PDF files</h2>
+            <p>Drag and drop here, or choose files from your device.</p>
+            <label class="primary-button" for="file-input">Choose PDFs</label>
+            <input id="file-input" type="file" accept="application/pdf" multiple />
+          </div>
+
+          <dl class="stats-grid" aria-label="Session summary">
+            <div>
+              <dt>Files</dt>
+              <dd id="file-count">0</dd>
+            </div>
+            <div>
+              <dt>Selected pages</dt>
+              <dd id="selected-pages">0</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd id="session-status">Idle</dd>
+            </div>
+          </dl>
+        </section>
+      </header>
+
+      <main class="workspace">
+        <section class="panel intro-panel" aria-labelledby="how-it-works-title">
+          <div class="section-heading">
+            <p class="eyebrow">How it works</p>
+            <h2 id="how-it-works-title">Simple page-level control</h2>
+          </div>
+
+          <div class="flow-steps">
+            <article>
+              <span>01</span>
+              <h3>Add PDFs</h3>
+              <p>Import multiple PDF files in the order you want them merged.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Toggle pages</h3>
+              <p>Every page starts selected. Uncheck pages you want to exclude.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Export merged PDF</h3>
+              <p>Generate a single PDF download directly in your browser.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel controls-panel" aria-labelledby="selection-title">
+          <div class="section-heading compact-heading">
+            <div>
+              <p class="eyebrow">Selection</p>
+              <h2 id="selection-title">Included pages</h2>
+            </div>
+            <button id="reset-button" class="ghost-button" type="button">Reset session</button>
+          </div>
+
+          <p id="feedback" class="feedback" aria-live="polite">
+            Add PDF files to start selecting pages.
+          </p>
+
+          <div id="file-list" class="file-list" aria-live="polite"></div>
+
+          <div class="export-bar">
+            <div>
+              <p class="export-label">Export ready</p>
+              <strong id="export-summary">0 selected pages</strong>
+            </div>
+            <button id="merge-button" class="primary-button" type="button" disabled>
+              Export one PDF
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="file-card-template">
+      <article class="file-card">
+        <div class="file-card-header">
+          <div>
+            <p class="file-tag">PDF</p>
+            <h3 class="file-name"></h3>
+          </div>
+          <p class="file-meta"></p>
+        </div>
+
+        <div class="file-actions">
+          <button type="button" class="chip-button select-all">Select all</button>
+          <button type="button" class="chip-button clear-all">Clear all</button>
+          <button type="button" class="chip-button invert-selection">Invert</button>
+        </div>
+
+        <div class="page-grid"></div>
+      </article>
+    </template>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
