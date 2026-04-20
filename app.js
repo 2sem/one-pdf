@@ -246,6 +246,9 @@ function render() {
     fileCard.querySelector(".file-order-hint").textContent = `Merge order: file ${index + 1}`;
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
     fileCard.querySelector(".settings-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
+    fileCard.querySelector(".drag-hint").textContent = state.documents.length > 1
+      ? "Drag to reorder file"
+      : "Add another PDF to enable reordering";
     const includeRangeInput = fileCard.querySelector(".include-range-input");
     const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
     includeRangeInput.value = documentState.includeRangeDraft;
@@ -261,6 +264,8 @@ function render() {
     const moveDownButton = fileCard.querySelector(".move-down");
     moveUpButton.disabled = index === 0;
     moveDownButton.disabled = index === state.documents.length - 1;
+    moveUpButton.hidden = index === 0;
+    moveDownButton.hidden = index === state.documents.length - 1;
     moveUpButton.addEventListener("click", () => moveDocument(index, index - 1));
     moveDownButton.addEventListener("click", () => moveDocument(index, index + 1));
 
