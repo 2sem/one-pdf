@@ -20,7 +20,6 @@ const elements = {
   appShell: document.querySelector("#app-shell"),
   workspace: document.querySelector("#workspace"),
   editorPanel: document.querySelector("#editor-panel"),
-  editorStepGrid: document.querySelector("#editor-step-grid"),
   summaryTotalFiles: document.querySelector("#summary-total-files"),
   summarySelectedFiles: document.querySelector("#summary-selected-files"),
   summarySelectedPages: document.querySelector("#summary-selected-pages"),
@@ -336,35 +335,7 @@ function scheduleRender() {
 }
 
 function renderEditorState() {
-  const activeStep = getCurrentEditorStep();
   elements.appShell.classList.toggle("editor-active", state.documents.length > 0);
-
-  elements.editorStepGrid.querySelectorAll(".step-card").forEach((stepCard) => {
-    const stepKey = stepCard.dataset.step;
-    stepCard.classList.toggle("is-active", stepKey === activeStep);
-    stepCard.classList.toggle("is-complete", isCompletedEditorStep(stepKey, activeStep));
-  });
-}
-
-function getCurrentEditorStep() {
-  if (!state.documents.length) {
-    return "upload";
-  }
-
-  if (elements.sessionStatus.textContent === "Done") {
-    return "download";
-  }
-
-  if (state.documents.some((documentState) => documentState.selections.some((value) => !value))) {
-    return "prepare";
-  }
-
-  return "review";
-}
-
-function isCompletedEditorStep(stepKey, activeStep) {
-  const orderedSteps = ["upload", "review", "prepare", "download"];
-  return orderedSteps.indexOf(stepKey) < orderedSteps.indexOf(activeStep);
 }
 
 function focusEditorPanel() {
