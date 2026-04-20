@@ -711,6 +711,7 @@ h1 {
 
 .file-meta {
   text-align: right;
+  font-size: 0.92rem;
 }
 
 .settings-meta {
@@ -728,6 +729,17 @@ h1 {
   margin-top: 4px;
   color: var(--muted);
   font-size: 0.88rem;
+}
+
+.file-card-header {
+  align-items: start;
+  margin-bottom: 8px;
+}
+
+.file-card-header h3 {
+  margin: 0;
+  font-size: 1.9rem;
+  line-height: 1.05;
 }
 
 .drag-hint {
@@ -847,16 +859,22 @@ h1 {
 }
 
 .selection-summary {
-  margin-top: 8px;
-  margin-bottom: 18px;
-  padding: 16px;
+  margin-top: 6px;
+  margin-bottom: 14px;
+  padding: 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.025);
 }
 
-.summary-heading {
-  margin-bottom: 16px;
+.summary-heading-inline {
+  margin-bottom: 10px;
+}
+
+.summary-heading-inline h3,
+.selection-title-inline {
+  margin: 0;
+  font-size: 1.55rem;
 }
 
 .summary-metrics,
@@ -867,7 +885,7 @@ h1 {
 
 .summary-metrics {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .summary-metrics article,
@@ -875,7 +893,7 @@ h1 {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.03);
-  padding: 14px;
+  padding: 10px 12px;
 }
 
 .summary-metrics span,
@@ -892,7 +910,7 @@ h1 {
 }
 
 .summary-metrics strong {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
 }
 
 .summary-file-item {
