@@ -648,7 +648,7 @@ h1 {
 
 .file-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 284px;
+  grid-template-columns: minmax(0, 1fr) 256px;
   gap: 18px;
   align-items: start;
 }
@@ -664,7 +664,7 @@ h1 {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.025);
-  padding: 14px;
+  padding: 12px;
 }
 
 .settings-panel-header {
@@ -711,7 +711,8 @@ h1 {
 
 .file-meta {
   text-align: right;
-  font-size: 0.92rem;
+  font-size: 0.84rem;
+  white-space: nowrap;
 }
 
 .settings-meta {
@@ -726,20 +727,24 @@ h1 {
 }
 
 .file-order-hint {
-  margin-top: 4px;
+  margin-top: 2px;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: 0.8rem;
 }
 
 .file-card-header {
-  align-items: start;
-  margin-bottom: 8px;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
 .file-card-header h3 {
   margin: 0;
-  font-size: 1.9rem;
+  font-size: 1.45rem;
   line-height: 1.05;
+}
+
+.file-tag {
+  margin-bottom: 4px;
 }
 
 .drag-hint {
@@ -824,16 +829,20 @@ h1 {
 }
 
 .export-controls {
-  margin-top: 8px;
-  margin-bottom: 18px;
-  padding: 16px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  padding: 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.025);
+  display: grid;
+  grid-template-columns: minmax(0, 280px) 1fr;
+  gap: 12px;
+  align-items: center;
 }
 
 .export-field {
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 
 .secondary-range-field {
@@ -843,19 +852,24 @@ h1 {
 .export-details {
   margin: 0;
   color: var(--muted);
-  line-height: 1.6;
+  line-height: 1.45;
+  font-size: 0.92rem;
 }
 
 .export-bar {
   position: sticky;
   bottom: 16px;
   z-index: 20;
-  padding: 18px;
+  padding: 14px 16px;
   border: 1px solid rgba(122, 229, 198, 0.18);
   border-radius: var(--radius-lg);
   background: rgba(12, 18, 31, 0.92);
   backdrop-filter: blur(16px);
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+}
+
+.export-label {
+  margin-bottom: 6px;
 }
 
 .selection-summary {
@@ -1109,6 +1123,10 @@ h1 {
   .site-footer {
     align-items: start;
     flex-direction: column;
+  }
+
+  .export-controls {
+    grid-template-columns: 1fr;
   }
 
   .file-layout {
