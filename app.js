@@ -6,6 +6,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dis
 const elements = {
   fileInput: document.querySelector("#file-input"),
   dropzone: document.querySelector("#dropzone"),
+  editorDropzone: document.querySelector("#editor-dropzone"),
   fileList: document.querySelector("#file-list"),
   mergeButton: document.querySelector("#merge-button"),
   resetButton: document.querySelector("#reset-button"),
@@ -86,24 +87,16 @@ function setupDropzone() {
     event.stopPropagation();
   };
 
-  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-    elements.dropzone.addEventListener(eventName, preventDefaults);
+  setupFileDropTarget(elements.dropzone, {
+    onDragStateChange: (isDragging) => {
+      elements.dropzone.classList.toggle("is-dragging", isDragging);
+    },
   });
 
-  ["dragenter", "dragover"].forEach((eventName) => {
-    elements.dropzone.addEventListener(eventName, () => {
-      elements.dropzone.classList.add("is-dragging");
-    });
-  });
-
-  ["dragleave", "drop"].forEach((eventName) => {
-    elements.dropzone.addEventListener(eventName, () => {
-      elements.dropzone.classList.remove("is-dragging");
-    });
-  });
-
-  elements.dropzone.addEventListener("drop", (event) => {
-    void handleFiles(event.dataTransfer?.files);
+  setupFileDropTarget(elements.editorDropzone, {
+    onDragStateChange: (isDragging) => {
+      elements.editorDropzone.classList.toggle("is-dragging", isDragging);
+    },
   });
 
   elements.dropzone.addEventListener("keydown", (event) => {
@@ -111,6 +104,40 @@ function setupDropzone() {
       event.preventDefault();
       elements.fileInput.click();
     }
+  });
+
+  elements.editorDropzone.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      elements.fileInput.click();
+    }
+  });
+}
+
+function setupFileDropTarget(target, { onDragStateChange }) {
+  const preventDefaults = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    target.addEventListener(eventName, preventDefaults);
+  });
+
+  ["dragenter", "dragover"].forEach((eventName) => {
+    target.addEventListener(eventName, () => {
+      onDragStateChange(true);
+    });
+  });
+
+  ["dragleave", "drop"].forEach((eventName) => {
+    target.addEventListener(eventName, () => {
+      onDragStateChange(false);
+    });
+  });
+
+  target.addEventListener("drop", (event) => {
+    void handleFiles(event.dataTransfer?.files);
   });
 }
 

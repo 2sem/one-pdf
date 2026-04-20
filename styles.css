@@ -332,7 +332,7 @@ h1 {
 .page-shell.editor-active .launch-grid,
 .page-shell.editor-active .support-panel,
 .page-shell.editor-active .site-footer {
-  opacity: 0.42;
+  display: none;
 }
 
 .page-shell.editor-active .controls-panel,
@@ -356,6 +356,52 @@ h1 {
   margin-bottom: 24px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--line);
+}
+
+.editor-upload-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.editor-upload-copy {
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 52ch;
+}
+
+.editor-upload-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.editor-dropzone {
+  min-height: 50px;
+  min-width: 170px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px dashed rgba(122, 229, 198, 0.4);
+  background: rgba(122, 229, 198, 0.07);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.editor-dropzone.is-dragging {
+  border-color: rgba(122, 229, 198, 0.8);
+  background: rgba(122, 229, 198, 0.16);
+  transform: translateY(-1px);
 }
 
 .editor-steps-heading {
@@ -932,6 +978,7 @@ h1 {
   .file-card-header,
   .export-bar,
   .summary-file-header,
+  .editor-upload-bar,
   .section-heading,
   .topbar,
   .site-footer {
