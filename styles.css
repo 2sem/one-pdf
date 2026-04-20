@@ -646,6 +646,42 @@ h1 {
   transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
+.file-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  align-items: start;
+}
+
+.file-pages-panel,
+.file-settings-panel {
+  min-width: 0;
+}
+
+.file-settings-panel {
+  position: sticky;
+  top: 96px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.025);
+  padding: 16px;
+}
+
+.settings-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.settings-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: var(--accent);
+}
+
 .file-card.is-dragging-file {
   opacity: 0.5;
 }
@@ -680,7 +716,6 @@ h1 {
 .file-card-side {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 12px;
 }
 
@@ -723,16 +758,16 @@ h1 {
 }
 
 .file-actions {
-  margin: 18px 0;
+  margin: 14px 0;
   flex-wrap: wrap;
 }
 
 .range-controls {
-  margin-bottom: 18px;
-  padding: 16px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.025);
+  margin-bottom: 0;
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
 }
 
 .export-controls {
@@ -988,11 +1023,20 @@ h1 {
   .export-bar,
   .summary-file-header,
   .editor-upload-bar,
+  .settings-panel-header,
   .section-heading,
   .topbar,
   .site-footer {
     align-items: start;
     flex-direction: column;
+  }
+
+  .file-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .file-settings-panel {
+    position: static;
   }
 
   .step-card {

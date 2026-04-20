@@ -31,7 +31,7 @@ final class TestRunner {
     init() {
         let configuration = WKWebViewConfiguration()
         configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
-        self.webView = WKWebView(frame: .zero, configuration: configuration)
+        self.webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1440, height: 1200), configuration: configuration)
         self.webView.setValue(false, forKey: "drawsBackground")
         self.webView.navigationDelegate = delegate
         self.delegate.onFinish = { [weak self] in
@@ -123,6 +123,12 @@ final class TestRunner {
         const editorRect = document.querySelector('#editor-panel').getBoundingClientRect();
         if (editorRect.width < workspaceRect.width * 0.9) {
           throw new Error(`Expected editor panel to expand to near full width, got editor=${editorRect.width} workspace=${workspaceRect.width}`);
+        }
+
+        const firstPagesPanelRect = document.querySelector('.file-pages-panel')?.getBoundingClientRect();
+        const firstSettingsPanelRect = document.querySelector('.file-settings-panel')?.getBoundingClientRect();
+        if (!firstPagesPanelRect || !firstSettingsPanelRect || firstPagesPanelRect.width <= firstSettingsPanelRect.width) {
+          throw new Error(`Expected pages area to be wider than settings sidebar, got pages=${firstPagesPanelRect?.width} settings=${firstSettingsPanelRect?.width}`);
         }
 
         const exportBarStyle = window.getComputedStyle(document.querySelector('#export-bar'));

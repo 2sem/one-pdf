@@ -348,58 +348,69 @@
 
     <template id="file-card-template">
       <article class="file-card">
-        <div class="file-card-header">
-          <div>
-            <p class="file-tag">PDF</p>
-            <h3 class="file-name"></h3>
-            <p class="file-order-hint"></p>
-            <div class="drag-row">
-              <span class="drag-handle" aria-hidden="true">⋮⋮</span>
-              <p class="drag-hint">Drag this file card to change merge order.</p>
+        <div class="file-layout">
+          <section class="file-pages-panel">
+            <div class="file-card-header">
+              <div>
+                <p class="file-tag">PDF</p>
+                <h3 class="file-name"></h3>
+                <p class="file-order-hint"></p>
+              </div>
+              <p class="file-meta"></p>
             </div>
-          </div>
-          <div class="file-card-side">
-            <p class="file-meta"></p>
-            <div class="file-order-actions">
-              <button type="button" class="chip-button move-up">Move up</button>
-              <button type="button" class="chip-button move-down">Move down</button>
+
+            <div class="page-grid"></div>
+          </section>
+
+          <aside class="file-settings-panel">
+            <div class="settings-panel-header">
+              <p class="settings-kicker">Settings</p>
+              <div class="drag-row">
+                <span class="drag-handle" aria-hidden="true">⋮⋮</span>
+                <p class="drag-hint">Drag to reorder file</p>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class="file-actions">
-          <button type="button" class="chip-button select-all">Select all</button>
-          <button type="button" class="chip-button clear-all">Clear all</button>
-          <button type="button" class="chip-button invert-selection">Invert</button>
-        </div>
+            <div class="file-card-side">
+              <div class="file-order-actions">
+                <button type="button" class="chip-button move-up">Move up</button>
+                <button type="button" class="chip-button move-down">Move down</button>
+              </div>
+            </div>
 
-        <div class="range-controls">
-          <div class="range-field">
-            <label class="range-label">Include range</label>
-            <input
-              type="text"
-              class="range-input include-range-input"
-              inputmode="text"
-              placeholder="Example: 1-3,5,8"
-            />
-          </div>
-          <div class="range-field secondary-range-field">
-            <label class="range-label">Exclude range</label>
-            <input
-              type="text"
-              class="range-input exclude-range-input"
-              inputmode="text"
-              placeholder="Example: 2,6-8"
-            />
-          </div>
-          <div class="range-actions">
-            <button type="button" class="chip-button apply-include">Include range</button>
-            <button type="button" class="chip-button apply-exclude">Exclude range</button>
-          </div>
-          <p class="range-help">Page numbers start at 1 and can combine comma-separated values with ranges.</p>
-        </div>
+            <div class="file-actions">
+              <button type="button" class="chip-button select-all">Select all</button>
+              <button type="button" class="chip-button clear-all">Clear all</button>
+              <button type="button" class="chip-button invert-selection">Invert</button>
+            </div>
 
-        <div class="page-grid"></div>
+            <div class="range-controls">
+              <div class="range-field">
+                <label class="range-label">Include range</label>
+                <input
+                  type="text"
+                  class="range-input include-range-input"
+                  inputmode="text"
+                  placeholder="Example: 1-3,5,8"
+                />
+              </div>
+              <div class="range-field secondary-range-field">
+                <label class="range-label">Exclude range</label>
+                <input
+                  type="text"
+                  class="range-input exclude-range-input"
+                  inputmode="text"
+                  placeholder="Example: 2,6-8"
+                />
+              </div>
+              <div class="range-actions">
+                <button type="button" class="chip-button apply-include">Include range</button>
+                <button type="button" class="chip-button apply-exclude">Exclude range</button>
+              </div>
+              <p class="range-help">Pages stay on the left while you adjust file settings here.</p>
+            </div>
+          </aside>
+        </div>
       </article>
     </template>
 
