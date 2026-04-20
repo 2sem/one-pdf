@@ -131,6 +131,11 @@ final class TestRunner {
           throw new Error(`Expected pages area to be wider than settings sidebar, got pages=${firstPagesPanelRect?.width} settings=${firstSettingsPanelRect?.width}`);
         }
 
+        const rangeControls = document.querySelector('.file-card .range-controls');
+        if (rangeControls?.hasAttribute('open')) {
+          throw new Error('Expected advanced range controls to be collapsed by default');
+        }
+
         const exportBarStyle = window.getComputedStyle(document.querySelector('#export-bar'));
         if (exportBarStyle.position !== 'sticky') {
           throw new Error(`Expected export bar to use sticky positioning, got ${exportBarStyle.position}`);
@@ -169,6 +174,7 @@ final class TestRunner {
         }
 
         const includeInput = document.querySelector('.file-card .include-range-input');
+        document.querySelector('.file-card .range-summary').click();
         includeInput.value = '1';
         includeInput.dispatchEvent(new Event('input', { bubbles: true }));
         document.querySelector('.file-card .apply-include').click();

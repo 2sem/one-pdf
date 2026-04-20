@@ -245,6 +245,7 @@ function render() {
     fileCard.querySelector(".file-name").textContent = documentState.name;
     fileCard.querySelector(".file-order-hint").textContent = `Merge order: file ${index + 1}`;
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
+    fileCard.querySelector(".settings-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
     const includeRangeInput = fileCard.querySelector(".include-range-input");
     const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
     includeRangeInput.value = documentState.includeRangeDraft;
