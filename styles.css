@@ -197,6 +197,11 @@ h1 {
   margin-top: 28px;
 }
 
+.standalone-link {
+  display: inline-flex;
+  margin-top: 24px;
+}
+
 .ghost-link {
   display: inline-flex;
   min-height: 50px;
