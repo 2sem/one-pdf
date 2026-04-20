@@ -15,6 +15,10 @@ const elements = {
   exportSummary: document.querySelector("#export-summary"),
   exportDetails: document.querySelector("#export-details"),
   exportFilename: document.querySelector("#export-filename"),
+  appShell: document.querySelector("#app-shell"),
+  workspace: document.querySelector("#workspace"),
+  editorPanel: document.querySelector("#editor-panel"),
+  editorStepGrid: document.querySelector("#editor-step-grid"),
   summaryTotalFiles: document.querySelector("#summary-total-files"),
   summarySelectedFiles: document.querySelector("#summary-selected-files"),
   summarySelectedPages: document.querySelector("#summary-selected-pages"),
@@ -111,6 +115,7 @@ function setupDropzone() {
 }
 
 async function handleFiles(fileList) {
+  const hadDocumentsBefore = state.documents.length > 0;
   const files = Array.from(fileList ?? []).filter(isPdfFile);
 
   if (!files.length) {
@@ -153,6 +158,10 @@ async function handleFiles(fileList) {
     syncSuggestedExportFilename();
     elements.sessionStatus.textContent = "Ready";
     setFeedback("Every page starts included. Uncheck pages you want to exclude before exporting.");
+
+    if (!hadDocumentsBefore) {
+      focusEditorPanel();
+    }
   }
 
   render();
@@ -184,6 +193,7 @@ function render() {
   elements.selectedPages.textContent = String(selectedCount);
   elements.mergeButton.disabled = selectedCount === 0 || state.exporting;
   elements.mergeButton.textContent = state.exporting ? "Exporting..." : "Export one PDF";
+  renderEditorState();
   renderExportMeta();
   renderSelectionSummary();
   elements.fileList.replaceChildren();
@@ -288,6 +298,44 @@ function scheduleRender() {
   state.renderScheduled = true;
   window.requestAnimationFrame(() => {
     render();
+  });
+}
+
+function renderEditorState() {
+  const activeStep = getCurrentEditorStep();
+  elements.appShell.classList.toggle("editor-active", state.documents.length > 0);
+
+  elements.editorStepGrid.querySelectorAll(".step-card").forEach((stepCard) => {
+    const stepKey = stepCard.dataset.step;
+    stepCard.classList.toggle("is-active", stepKey === activeStep);
+    stepCard.classList.toggle("is-complete", isCompletedEditorStep(stepKey, activeStep));
+  });
+}
+
+function getCurrentEditorStep() {
+  if (!state.documents.length) {
+    return "upload";
+  }
+
+  if (elements.sessionStatus.textContent === "Done") {
+    return "download";
+  }
+
+  if (state.documents.some((documentState) => documentState.selections.some((value) => !value))) {
+    return "prepare";
+  }
+
+  return "review";
+}
+
+function isCompletedEditorStep(stepKey, activeStep) {
+  const orderedSteps = ["upload", "review", "prepare", "download"];
+  return orderedSteps.indexOf(stepKey) < orderedSteps.indexOf(activeStep);
+}
+
+function focusEditorPanel() {
+  window.requestAnimationFrame(() => {
+    elements.editorPanel.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 

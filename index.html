@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="page-shell">
+    <div class="page-shell" id="app-shell">
       <nav class="topbar" aria-label="Primary">
         <a class="brand" href="#top">One PDF</a>
         <div class="topbar-links">
@@ -95,7 +95,7 @@
         </section>
       </header>
 
-      <main class="workspace">
+      <main class="workspace" id="workspace">
         <section class="panel intro-panel" aria-labelledby="how-it-works-title">
           <div class="section-heading">
             <p class="eyebrow">How it works</p>
@@ -145,7 +145,39 @@
           </section>
         </section>
 
-        <section class="panel controls-panel" aria-labelledby="selection-title">
+        <section class="panel controls-panel" id="editor-panel" aria-labelledby="selection-title">
+          <section class="editor-steps" aria-labelledby="editor-steps-title">
+            <div class="section-heading compact-heading editor-steps-heading">
+              <div>
+                <p class="eyebrow">Workflow</p>
+                <h2 id="editor-steps-title">Current merge step</h2>
+              </div>
+            </div>
+
+            <div class="step-grid" id="editor-step-grid">
+              <article class="step-card" data-step="upload">
+                <span>1</span>
+                <strong>Upload files</strong>
+                <p>Add or drop PDFs to start a merge session.</p>
+              </article>
+              <article class="step-card" data-step="review">
+                <span>2</span>
+                <strong>Review pages</strong>
+                <p>Reorder files and decide which pages stay included.</p>
+              </article>
+              <article class="step-card" data-step="prepare">
+                <span>3</span>
+                <strong>Prepare export</strong>
+                <p>Check the summary and confirm the output filename.</p>
+              </article>
+              <article class="step-card" data-step="download">
+                <span>4</span>
+                <strong>Download PDF</strong>
+                <p>Export the merged PDF and save the final result.</p>
+              </article>
+            </div>
+          </section>
+
           <div class="section-heading compact-heading">
             <div>
               <p class="eyebrow">Selection</p>
