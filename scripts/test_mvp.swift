@@ -101,13 +101,33 @@ final class TestRunner {
 
         await window.onePdfApp.handleFiles(files);
 
-        const checkboxes = Array.from(document.querySelectorAll('.page-toggle input'));
-        if (checkboxes.length < 5) {
-          throw new Error(`Expected at least 5 page checkboxes, found ${checkboxes.length}`);
+        for (let attempt = 0; attempt < 40; attempt += 1) {
+          const thumbnailCount = document.querySelectorAll('.page-thumbnail').length;
+          if (thumbnailCount >= 5) {
+            break;
+          }
+
+          await new Promise((resolve) => setTimeout(resolve, 250));
         }
 
-        checkboxes[1].click();
-        checkboxes[4].click();
+        if (document.querySelectorAll('.page-thumbnail').length < 5) {
+          throw new Error('Expected page thumbnails to be rendered before export');
+        }
+
+        const filenameInput = document.querySelector('#export-filename');
+        filenameInput.value = 'travel-pack-final';
+        filenameInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+        const fileCards = Array.from(document.querySelectorAll('.file-card'));
+        if (fileCards.length < 2) {
+          throw new Error('Expected at least two file cards for reorder testing');
+        }
+
+        const draggedDocumentId = fileCards[1].dataset.documentId;
+        const targetDocumentId = fileCards[0].dataset.documentId;
+        window.onePdfApp.reorderDocumentById(draggedDocumentId, targetDocumentId);
+        window.onePdfApp.applyRangeSelection(0, '1', 'include');
+        window.onePdfApp.applyRangeSelection(1, '2', 'exclude');
         await window.onePdfApp.exportMergedPdf();
 
         if (!capturedBlob) {
@@ -126,6 +146,8 @@ final class TestRunner {
 
         return {
           state: window.onePdfApp.getStateSnapshot(),
+          thumbnailCount: document.querySelectorAll('.page-thumbnail').length,
+          exportDetails: document.querySelector('#export-details')?.textContent,
           mergedBase64: btoa(binary),
         };
         """

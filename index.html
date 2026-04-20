@@ -3,27 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>One PDF — Merge selected PDF pages</title>
+    <title>One PDF — Merge PDFs directly in your browser</title>
     <meta
       name="description"
-      content="Merge only the PDF pages you want, directly in your browser."
+      content="Merge only the PDF pages you want, directly in your browser with no upload required."
     />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0d1117" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="One PDF — Merge PDFs directly in your browser" />
+    <meta
+      property="og:description"
+      content="A privacy-first PDF merge tool that lets you choose pages, reorder files, and export one PDF without uploading your documents."
+    />
+    <meta property="og:url" content="https://2sem.github.io/one-pdf/" />
+    <meta property="og:site_name" content="One PDF" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="One PDF — Merge PDFs directly in your browser" />
+    <meta
+      name="twitter:description"
+      content="Choose pages, reorder files, and merge PDFs locally in your browser with no upload required."
+    />
+    <link rel="canonical" href="https://2sem.github.io/one-pdf/" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="page-shell">
+      <nav class="topbar" aria-label="Primary">
+        <a class="brand" href="#top">One PDF</a>
+        <div class="topbar-links">
+          <a href="#how-it-works-title">How it works</a>
+          <a href="#pricing-title">Pricing</a>
+          <a href="#faq-title">FAQ</a>
+          <a href="#support-title">Support</a>
+        </div>
+      </nav>
+
       <header class="hero">
         <div class="hero-copy">
           <p class="eyebrow">Privacy-first PDF merge</p>
-          <h1>Pick pages. Merge once. Download instantly.</h1>
+          <h1>Merge PDFs in your browser, not on a server.</h1>
           <p class="hero-body">
-            One PDF runs fully in your browser, so your files stay on your device while
-            you combine only the pages you want.
+            One PDF runs fully in your browser. Add multiple PDFs, keep only the pages
+            you want, and download one merged PDF in seconds.
           </p>
+          <div class="hero-proof">
+            <div>
+              <strong>Instantly clear</strong>
+              <span>Add PDFs → remove pages → export one file.</span>
+            </div>
+            <div>
+              <strong>All pages selected by default</strong>
+              <span>Just uncheck the pages you do not want.</span>
+            </div>
+          </div>
           <div class="hero-badges" aria-label="Product highlights">
             <span>No upload</span>
-            <span>Works on GitHub Pages</span>
-            <span>Multi-file merge</span>
+            <span>Browser-only processing</span>
+            <span>Multi-PDF merge</span>
+          </div>
+          <div class="hero-actions">
+            <a class="primary-button" href="#upload-title">Start merging PDFs</a>
+            <a class="ghost-link" href="#pricing-title">See launch details</a>
           </div>
         </div>
 
@@ -31,9 +72,10 @@
           <div class="dropzone-panel" id="dropzone" tabindex="0" role="button">
             <p class="panel-kicker">MVP</p>
             <h2 id="upload-title">Select your PDF files</h2>
-            <p>Drag and drop here, or choose files from your device.</p>
+            <p>Drag them here or choose multiple PDFs from your device.</p>
             <label class="primary-button" for="file-input">Choose PDFs</label>
             <input id="file-input" type="file" accept="application/pdf" multiple />
+            <p class="dropzone-note">Files stay in your current browser session and are never uploaded.</p>
           </div>
 
           <dl class="stats-grid" aria-label="Session summary">
@@ -57,7 +99,7 @@
         <section class="panel intro-panel" aria-labelledby="how-it-works-title">
           <div class="section-heading">
             <p class="eyebrow">How it works</p>
-            <h2 id="how-it-works-title">Simple page-level control</h2>
+            <h2 id="how-it-works-title">A simple three-step flow</h2>
           </div>
 
           <div class="flow-steps">
@@ -68,15 +110,39 @@
             </article>
             <article>
               <span>02</span>
-              <h3>Toggle pages</h3>
-              <p>Every page starts selected. Uncheck pages you want to exclude.</p>
+              <h3>Choose pages</h3>
+              <p>Every page starts selected, so you only remove the pages you do not need.</p>
             </article>
             <article>
               <span>03</span>
-              <h3>Export merged PDF</h3>
-              <p>Generate a single PDF download directly in your browser.</p>
+              <h3>Export one PDF</h3>
+              <p>Download a single merged PDF built from only the selected pages.</p>
             </article>
           </div>
+
+          <section class="trust-panel" aria-labelledby="trust-title">
+            <div class="section-heading trust-heading">
+              <div>
+                <p class="eyebrow">Trust</p>
+                <h3 id="trust-title">Built for privacy-sensitive documents</h3>
+              </div>
+            </div>
+
+            <div class="trust-grid">
+              <article>
+                <strong>No upload</strong>
+                <p>Your PDFs are not sent to a server, which reduces storage and sharing risk.</p>
+              </article>
+              <article>
+                <strong>Browser-side processing</strong>
+                <p>Page selection and PDF merging happen inside your current browser session.</p>
+              </article>
+              <article>
+                <strong>Instant download</strong>
+                <p>As soon as your selection is ready, you can export one merged file immediately.</p>
+              </article>
+            </div>
+          </section>
         </section>
 
         <section class="panel controls-panel" aria-labelledby="selection-title">
@@ -94,6 +160,51 @@
 
           <div id="file-list" class="file-list" aria-live="polite"></div>
 
+          <section class="selection-summary" aria-labelledby="selection-summary-title">
+            <div class="section-heading compact-heading summary-heading">
+              <div>
+                <p class="eyebrow">Summary</p>
+                <h3 id="selection-summary-title">Current selection overview</h3>
+              </div>
+            </div>
+
+            <div class="summary-metrics">
+              <article>
+                <span>Total files</span>
+                <strong id="summary-total-files">0</strong>
+              </article>
+              <article>
+                <span>Selected files</span>
+                <strong id="summary-selected-files">0</strong>
+              </article>
+              <article>
+                <span>Selected pages</span>
+                <strong id="summary-selected-pages">0</strong>
+              </article>
+            </div>
+
+            <div id="summary-file-list" class="summary-file-list">
+              <p class="summary-empty">Add PDF files to see a per-file selection summary.</p>
+            </div>
+          </section>
+
+          <div class="export-controls">
+            <div class="range-field export-field">
+              <label class="range-label" for="export-filename">Export filename</label>
+              <input
+                id="export-filename"
+                type="text"
+                class="range-input"
+                placeholder="one-pdf-merged"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+            <p id="export-details" class="export-details">
+              Your export will include 0 files and 0 selected pages.
+            </p>
+          </div>
+
           <div class="export-bar">
             <div>
               <p class="export-label">Export ready</p>
@@ -105,6 +216,105 @@
           </div>
         </section>
       </main>
+
+      <section class="launch-grid" aria-label="Launch details">
+        <section class="panel pricing-panel" aria-labelledby="pricing-title">
+          <div class="section-heading compact-heading">
+            <div>
+              <p class="eyebrow">Pricing</p>
+              <h2 id="pricing-title">Simple launch offer</h2>
+            </div>
+          </div>
+
+          <div class="pricing-card">
+            <p class="pricing-kicker">Free while in public MVP</p>
+            <div class="pricing-row">
+              <strong>$0</strong>
+              <span>No signup required</span>
+            </div>
+            <ul class="pricing-list">
+              <li>Merge multiple PDFs in one session</li>
+              <li>Choose individual pages or page ranges</li>
+              <li>Reorder files before export</li>
+              <li>Preview pages locally with thumbnails</li>
+            </ul>
+            <p class="pricing-note">
+              Paid automation, batch workflows, and cloud features can be added later without
+              changing the local-first core experience.
+            </p>
+          </div>
+        </section>
+
+        <section class="panel faq-panel" aria-labelledby="faq-title">
+          <div class="section-heading compact-heading">
+            <div>
+              <p class="eyebrow">FAQ</p>
+              <h2 id="faq-title">Questions users will ask first</h2>
+            </div>
+          </div>
+
+          <div class="faq-list">
+            <details open>
+              <summary>Are my PDFs uploaded anywhere?</summary>
+              <p>No. Files stay inside your current browser session and are processed locally.</p>
+            </details>
+            <details>
+              <summary>Can I remove just a few pages from a large PDF?</summary>
+              <p>Yes. You can uncheck pages manually or apply a page range like <code>1-3,8</code>.</p>
+            </details>
+            <details>
+              <summary>Does merge order follow the file list on screen?</summary>
+              <p>Yes. Use the move up and move down controls to decide the final merge order.</p>
+            </details>
+            <details>
+              <summary>Why can large files feel slower?</summary>
+              <p>Because rendering and merging happen locally in your browser instead of on a server.</p>
+            </details>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel support-panel" id="support-title" aria-labelledby="support-heading">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="eyebrow">Support & privacy</p>
+            <h2 id="support-heading">Launch-ready trust layer</h2>
+          </div>
+        </div>
+
+        <div class="support-grid">
+          <article>
+            <strong>Privacy promise</strong>
+            <p>
+              One PDF is designed for local processing first. Sensitive documents do not need to
+              leave your device to be merged.
+            </p>
+          </article>
+          <article>
+            <strong>Best use cases</strong>
+            <p>
+              Great for travel documents, contracts, study materials, receipts, and any flow where
+              you only need a subset of pages.
+            </p>
+          </article>
+          <article>
+            <strong>Support</strong>
+            <p>
+              For launch feedback or bug reports, open a GitHub issue in the project repository and
+              include the browser, PDF type, and expected result.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <p>One PDF · Local-first PDF merge for fast page-level export.</p>
+        <div>
+          <a href="https://github.com/2sem/one-pdf" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="#support-heading">Privacy</a>
+          <a href="#faq-title">FAQ</a>
+        </div>
+      </footer>
     </div>
 
     <template id="file-card-template">
@@ -113,14 +323,39 @@
           <div>
             <p class="file-tag">PDF</p>
             <h3 class="file-name"></h3>
+            <p class="file-order-hint"></p>
+            <p class="drag-hint">Drag this file card to change merge order.</p>
           </div>
-          <p class="file-meta"></p>
+          <div class="file-card-side">
+            <p class="file-meta"></p>
+            <div class="file-order-actions">
+              <button type="button" class="chip-button move-up">Move up</button>
+              <button type="button" class="chip-button move-down">Move down</button>
+            </div>
+          </div>
         </div>
 
         <div class="file-actions">
           <button type="button" class="chip-button select-all">Select all</button>
           <button type="button" class="chip-button clear-all">Clear all</button>
           <button type="button" class="chip-button invert-selection">Invert</button>
+        </div>
+
+        <div class="range-controls">
+          <div class="range-field">
+            <label class="range-label">Page range</label>
+            <input
+              type="text"
+              class="range-input"
+              inputmode="text"
+              placeholder="Example: 1-3,5,8"
+            />
+          </div>
+          <div class="range-actions">
+            <button type="button" class="chip-button apply-include">Include range</button>
+            <button type="button" class="chip-button apply-exclude">Exclude range</button>
+          </div>
+          <p class="range-help">Page numbers start at 1 and can combine comma-separated values with ranges.</p>
         </div>
 
         <div class="page-grid"></div>
