@@ -147,43 +147,28 @@
 
         <section class="panel controls-panel" id="editor-panel" aria-labelledby="selection-title">
           <section class="editor-steps" aria-labelledby="editor-steps-title">
-            <div class="section-heading compact-heading editor-steps-heading">
-              <div>
-                <p class="eyebrow">Workflow</p>
-                <h2 id="editor-steps-title">Current merge step</h2>
-              </div>
-            </div>
-
             <div class="step-grid" id="editor-step-grid">
               <article class="step-card" data-step="upload">
                 <span>1</span>
-                <strong>Upload files</strong>
-                <p>Add or drop PDFs to start a merge session.</p>
+                <strong id="editor-steps-title">Upload</strong>
               </article>
               <article class="step-card" data-step="review">
                 <span>2</span>
-                <strong>Review pages</strong>
-                <p>Reorder files and decide which pages stay included.</p>
+                <strong>Review</strong>
               </article>
               <article class="step-card" data-step="prepare">
                 <span>3</span>
-                <strong>Prepare export</strong>
-                <p>Check the summary and confirm the output filename.</p>
+                <strong>Prepare</strong>
               </article>
               <article class="step-card" data-step="download">
                 <span>4</span>
-                <strong>Download PDF</strong>
-                <p>Export the merged PDF and save the final result.</p>
+                <strong>Download</strong>
               </article>
             </div>
           </section>
 
           <section class="editor-upload-bar" aria-labelledby="editor-upload-title">
-            <div>
-              <p class="eyebrow">Editor</p>
-              <h3 id="editor-upload-title">Add more PDFs without leaving the workspace</h3>
-              <p class="editor-upload-copy">Drop more PDFs here or choose more files to keep building the same merge session.</p>
-            </div>
+            <h3 id="editor-upload-title">Add more PDFs</h3>
             <div class="editor-upload-actions">
               <label class="primary-button" for="file-input">Add more PDFs</label>
               <div id="editor-dropzone" class="editor-dropzone" tabindex="0" role="button">Drop PDFs here</div>
