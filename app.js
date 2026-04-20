@@ -51,6 +51,9 @@ elements.exportFilename.addEventListener("input", () => {
   state.exportFilenameTouched = true;
   renderExportMeta();
 });
+elements.exportFilename.addEventListener("blur", () => {
+  normalizeExportFilenameField();
+});
 
 setupDropzone();
 render();
@@ -290,6 +293,7 @@ function scheduleRender() {
 
 async function exportMergedPdf() {
   const selectedCount = getSelectedPageCount();
+  normalizeExportFilenameField();
   const exportFileName = getNormalizedExportFilename();
 
   if (!selectedCount) {
@@ -361,6 +365,15 @@ function renderExportMeta() {
   }
   elements.exportSummary.textContent = `${selectedPages} selected ${selectedPages === 1 ? "page" : "pages"}`;
   elements.exportDetails.textContent = `Your export will include ${selectedFiles} ${selectedFiles === 1 ? "file" : "files"} and ${selectedPages} selected ${selectedPages === 1 ? "page" : "pages"}. Output name: ${exportFileName}`;
+}
+
+function normalizeExportFilenameField() {
+  state.exportFilename = getNormalizedExportFilename();
+  state.exportFilenameTouched = true;
+
+  if (elements.exportFilename.value !== state.exportFilename) {
+    elements.exportFilename.value = state.exportFilename;
+  }
 }
 
 function renderSelectionSummary() {

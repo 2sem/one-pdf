@@ -86,7 +86,9 @@ final class TestRunner {
 
         const originalCreate = URL.createObjectURL.bind(URL);
         const originalRevoke = URL.revokeObjectURL.bind(URL);
+        const originalClick = HTMLAnchorElement.prototype.click;
         let capturedBlob = null;
+        let capturedDownloadName = null;
 
         URL.createObjectURL = (blob) => {
           capturedBlob = blob;
@@ -94,6 +96,10 @@ final class TestRunner {
         };
 
         URL.revokeObjectURL = () => {};
+        HTMLAnchorElement.prototype.click = function () {
+          capturedDownloadName = this.download;
+          return originalClick.call(this);
+        };
 
         const paths = ["./tests/fixtures/sample-a.pdf", "./tests/fixtures/sample-b.pdf"];
         const blobs = await Promise.all(paths.map((path) => fetch(path).then((response) => response.blob())));
@@ -149,6 +155,10 @@ final class TestRunner {
 
         await window.onePdfApp.exportMergedPdf();
 
+        if (capturedDownloadName !== 'Paid_Applications_v120.pdf') {
+          throw new Error(`Expected captured download filename to be normalized, got: ${capturedDownloadName}`);
+        }
+
         if (!capturedBlob) {
           throw new Error('Merged PDF blob was not captured');
         }
@@ -162,11 +172,13 @@ final class TestRunner {
 
         URL.createObjectURL = originalCreate;
         URL.revokeObjectURL = originalRevoke;
+        HTMLAnchorElement.prototype.click = originalClick;
 
         return {
           state: window.onePdfApp.getStateSnapshot(),
           thumbnailCount: document.querySelectorAll('.page-thumbnail').length,
           exportFilename: document.querySelector('#export-filename')?.value,
+          capturedDownloadName,
           exportDetails: document.querySelector('#export-details')?.textContent,
           mergedBase64: btoa(binary),
         };
