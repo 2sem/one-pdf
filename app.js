@@ -35,6 +35,7 @@ const state = {
   dragState: {
     draggedDocumentId: null,
     dropTargetDocumentId: null,
+    dropPosition: null,
   },
 };
 
@@ -159,6 +160,7 @@ function resetSession() {
   state.exportFilenameTouched = false;
   state.dragState.draggedDocumentId = null;
   state.dragState.dropTargetDocumentId = null;
+  state.dragState.dropPosition = null;
   disconnectThumbnailObserver();
   setFeedback("Add PDF files to start selecting pages.");
   elements.sessionStatus.textContent = "Idle";
@@ -190,6 +192,9 @@ function render() {
     }
     if (state.dragState.dropTargetDocumentId === documentState.id) {
       fileCard.classList.add("is-drop-target");
+      if (state.dragState.dropPosition) {
+        fileCard.classList.add(`drop-${state.dragState.dropPosition}`);
+      }
     }
 
     attachFileDragHandlers(fileCard, documentState.id);
@@ -533,20 +538,28 @@ function moveDocument(fromIndex, toIndex) {
   syncSuggestedExportFilename();
   state.dragState.draggedDocumentId = null;
   state.dragState.dropTargetDocumentId = null;
+  state.dragState.dropPosition = null;
   setFeedback(`Order updated. ${movedDocument.name} is now file ${toIndex + 1} in the merge.`);
   render();
 }
 
-function reorderDocumentById(draggedDocumentId, targetDocumentId) {
+function reorderDocumentById(draggedDocumentId, targetDocumentId, dropPosition = "before") {
   if (!draggedDocumentId || !targetDocumentId || draggedDocumentId === targetDocumentId) {
     return;
   }
 
   const fromIndex = state.documents.findIndex((documentState) => documentState.id === draggedDocumentId);
-  const toIndex = state.documents.findIndex((documentState) => documentState.id === targetDocumentId);
+  const targetIndex = state.documents.findIndex((documentState) => documentState.id === targetDocumentId);
 
-  if (fromIndex === -1 || toIndex === -1) {
+  if (fromIndex === -1 || targetIndex === -1) {
     return;
+  }
+
+  let toIndex = targetIndex;
+  if (dropPosition === "after") {
+    toIndex = targetIndex + (fromIndex < targetIndex ? 0 : 1);
+  } else if (fromIndex < targetIndex) {
+    toIndex = targetIndex - 1;
   }
 
   moveDocument(fromIndex, toIndex);
@@ -783,6 +796,7 @@ function attachFileDragHandlers(fileCard, documentId) {
   fileCard.addEventListener("dragstart", (event) => {
     state.dragState.draggedDocumentId = documentId;
     state.dragState.dropTargetDocumentId = documentId;
+    state.dragState.dropPosition = null;
 
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = "move";
@@ -798,6 +812,9 @@ function attachFileDragHandlers(fileCard, documentId) {
       return;
     }
 
+    const bounds = fileCard.getBoundingClientRect();
+    const midpoint = bounds.top + bounds.height / 2;
+    state.dragState.dropPosition = event.clientY < midpoint ? "before" : "after";
     state.dragState.dropTargetDocumentId = documentId;
     fileCard.classList.add("is-drop-target");
   });
@@ -805,6 +822,7 @@ function attachFileDragHandlers(fileCard, documentId) {
   fileCard.addEventListener("dragleave", () => {
     if (state.dragState.dropTargetDocumentId === documentId) {
       state.dragState.dropTargetDocumentId = null;
+      state.dragState.dropPosition = null;
       render();
     }
   });
@@ -812,12 +830,13 @@ function attachFileDragHandlers(fileCard, documentId) {
   fileCard.addEventListener("drop", (event) => {
     event.preventDefault();
     const draggedDocumentId = state.dragState.draggedDocumentId || event.dataTransfer?.getData("text/plain");
-    reorderDocumentById(draggedDocumentId, documentId);
+    reorderDocumentById(draggedDocumentId, documentId, state.dragState.dropPosition);
   });
 
   fileCard.addEventListener("dragend", () => {
     state.dragState.draggedDocumentId = null;
     state.dragState.dropTargetDocumentId = null;
+    state.dragState.dropPosition = null;
     render();
   });
 }
