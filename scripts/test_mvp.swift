@@ -114,10 +114,6 @@ final class TestRunner {
           throw new Error('Expected page thumbnails to be rendered before export');
         }
 
-        const filenameInput = document.querySelector('#export-filename');
-        filenameInput.value = 'travel-pack-final';
-        filenameInput.dispatchEvent(new Event('input', { bubbles: true }));
-
         const fileCards = Array.from(document.querySelectorAll('.file-card'));
         if (fileCards.length < 2) {
           throw new Error('Expected at least two file cards for reorder testing');
@@ -126,6 +122,12 @@ final class TestRunner {
         const draggedDocumentId = fileCards[1].dataset.documentId;
         const targetDocumentId = fileCards[0].dataset.documentId;
         window.onePdfApp.reorderDocumentById(draggedDocumentId, targetDocumentId);
+
+        const exportNameAfterReorder = document.querySelector('#export-filename')?.value;
+        if (exportNameAfterReorder !== 'sample-b-merged') {
+          throw new Error(`Expected suggested export name to follow reordered first file, got ${exportNameAfterReorder}`);
+        }
+
         window.onePdfApp.applyRangeSelection(0, '1', 'include');
         window.onePdfApp.applyRangeSelection(1, '2', 'exclude');
         await window.onePdfApp.exportMergedPdf();
@@ -147,6 +149,7 @@ final class TestRunner {
         return {
           state: window.onePdfApp.getStateSnapshot(),
           thumbnailCount: document.querySelectorAll('.page-thumbnail').length,
+          exportFilename: document.querySelector('#export-filename')?.value,
           exportDetails: document.querySelector('#export-details')?.textContent,
           mergedBase64: btoa(binary),
         };

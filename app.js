@@ -28,7 +28,8 @@ const VISIBLE_THUMBNAIL_ROOT_MARGIN = "240px";
 const state = {
   documents: [],
   exporting: false,
-  exportFilename: "one-pdf-merged",
+  exportFilename: "",
+  exportFilenameTouched: false,
   thumbnailObserver: null,
   renderScheduled: false,
   dragState: {
@@ -46,6 +47,7 @@ elements.resetButton.addEventListener("click", resetSession);
 elements.mergeButton.addEventListener("click", () => void exportMergedPdf());
 elements.exportFilename.addEventListener("input", () => {
   state.exportFilename = elements.exportFilename.value;
+  state.exportFilenameTouched = true;
   renderExportMeta();
 });
 
@@ -142,6 +144,7 @@ async function handleFiles(fileList) {
   }
 
   if (state.documents.length) {
+    syncSuggestedExportFilename();
     elements.sessionStatus.textContent = "Ready";
     setFeedback("Every page starts included. Uncheck pages you want to exclude before exporting.");
   }
@@ -152,7 +155,8 @@ async function handleFiles(fileList) {
 function resetSession() {
   state.documents = [];
   state.exporting = false;
-  state.exportFilename = "one-pdf-merged";
+  state.exportFilename = "";
+  state.exportFilenameTouched = false;
   state.dragState.draggedDocumentId = null;
   state.dragState.dropTargetDocumentId = null;
   disconnectThumbnailObserver();
@@ -340,7 +344,9 @@ function renderExportMeta() {
   const selectedFiles = getSelectedFileCount();
   const exportFileName = getNormalizedExportFilename();
 
-  elements.exportFilename.value = state.exportFilename;
+  if (elements.exportFilename.value !== state.exportFilename) {
+    elements.exportFilename.value = state.exportFilename;
+  }
   elements.exportSummary.textContent = `${selectedPages} selected ${selectedPages === 1 ? "page" : "pages"}`;
   elements.exportDetails.textContent = `Your export will include ${selectedFiles} ${selectedFiles === 1 ? "file" : "files"} and ${selectedPages} selected ${selectedPages === 1 ? "page" : "pages"}. Output name: ${exportFileName}`;
 }
@@ -364,6 +370,7 @@ function renderSelectionSummary() {
 
   state.documents.forEach((documentState, index) => {
     const selectedPageNumbers = getSelectedPageNumbers(documentState.selections);
+    const excludedPageNumbers = getExcludedPageNumbers(documentState.selections);
     const item = document.createElement("article");
     item.className = "summary-file-item";
     item.innerHTML = `
@@ -375,6 +382,7 @@ function renderSelectionSummary() {
         <strong>${selectedPageNumbers.length} selected</strong>
       </div>
       <p class="summary-pages">${getSelectionSummaryText(selectedPageNumbers, documentState.pageCount)}</p>
+      <p class="summary-pages excluded-pages">${getExcludedSummaryText(excludedPageNumbers, documentState.pageCount)}</p>
     `;
 
     elements.summaryFileList.append(item);
@@ -382,7 +390,8 @@ function renderSelectionSummary() {
 }
 
 function getNormalizedExportFilename() {
-  const trimmed = state.exportFilename.trim();
+  const rawName = state.exportFilename.trim() || getSuggestedExportBaseName();
+  const trimmed = rawName.trim();
   const safeBaseName = trimmed
     .replace(/[\\/:*?"<>|]+/g, "-")
     .replace(/\s+/g, "-")
@@ -393,9 +402,34 @@ function getNormalizedExportFilename() {
   return finalBaseName.toLowerCase().endsWith(".pdf") ? finalBaseName : `${finalBaseName}.pdf`;
 }
 
+function syncSuggestedExportFilename() {
+  if (state.exportFilenameTouched) {
+    return;
+  }
+
+  state.exportFilename = getSuggestedExportBaseName();
+}
+
+function getSuggestedExportBaseName() {
+  const firstDocument = state.documents[0];
+
+  if (!firstDocument) {
+    return "one-pdf-merged";
+  }
+
+  const originalName = firstDocument.name.replace(/\.pdf$/i, "");
+  return `${originalName}-merged`;
+}
+
 function getSelectedPageNumbers(selections) {
   return selections
     .map((isSelected, index) => (isSelected ? index + 1 : null))
+    .filter((pageNumber) => pageNumber !== null);
+}
+
+function getExcludedPageNumbers(selections) {
+  return selections
+    .map((isSelected, index) => (!isSelected ? index + 1 : null))
     .filter((pageNumber) => pageNumber !== null);
 }
 
@@ -408,11 +442,47 @@ function getSelectionSummaryText(selectedPageNumbers, totalPages) {
     return "All pages are currently included.";
   }
 
-  const compact = selectedPageNumbers.length > 12
-    ? `${selectedPageNumbers.slice(0, 12).join(", ")}…`
-    : selectedPageNumbers.join(", ");
+  return `Included pages: ${formatPageRanges(selectedPageNumbers)}`;
+}
 
-  return `Included pages: ${compact}`;
+function getExcludedSummaryText(excludedPageNumbers, totalPages) {
+  if (!excludedPageNumbers.length) {
+    return "Excluded pages: none.";
+  }
+
+  if (excludedPageNumbers.length === totalPages) {
+    return "Excluded pages: all pages.";
+  }
+
+  return `Excluded pages: ${formatPageRanges(excludedPageNumbers)}`;
+}
+
+function formatPageRanges(pageNumbers) {
+  if (!pageNumbers.length) {
+    return "none";
+  }
+
+  const ranges = [];
+  let start = pageNumbers[0];
+  let previous = pageNumbers[0];
+
+  for (let index = 1; index < pageNumbers.length; index += 1) {
+    const current = pageNumbers[index];
+
+    if (current === previous + 1) {
+      previous = current;
+      continue;
+    }
+
+    ranges.push(start === previous ? `${start}` : `${start}-${previous}`);
+    start = current;
+    previous = current;
+  }
+
+  ranges.push(start === previous ? `${start}` : `${start}-${previous}`);
+
+  const compact = ranges.join(", ");
+  return compact.length > 72 ? `${compact.slice(0, 72).trimEnd()}, …` : compact;
 }
 
 function escapeHtml(value) {
@@ -460,6 +530,7 @@ function moveDocument(fromIndex, toIndex) {
 
   const [movedDocument] = state.documents.splice(fromIndex, 1);
   state.documents.splice(toIndex, 0, movedDocument);
+  syncSuggestedExportFilename();
   state.dragState.draggedDocumentId = null;
   state.dragState.dropTargetDocumentId = null;
   setFeedback(`Order updated. ${movedDocument.name} is now file ${toIndex + 1} in the merge.`);

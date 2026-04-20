@@ -678,6 +678,11 @@ h1 {
   line-height: 1.6;
 }
 
+.excluded-pages {
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .summary-pages code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
