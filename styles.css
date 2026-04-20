@@ -783,6 +783,12 @@ h1 {
   justify-content: flex-end;
 }
 
+.icon-button {
+  min-width: 40px;
+  padding: 8px 10px;
+  font-weight: 700;
+}
+
 .file-actions {
   margin: 10px 0;
   flex-wrap: wrap;
