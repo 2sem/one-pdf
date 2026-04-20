@@ -335,6 +335,14 @@ h1 {
   display: none;
 }
 
+.page-shell.editor-active .workspace {
+  grid-template-columns: 1fr;
+}
+
+.page-shell.editor-active .intro-panel {
+  display: none;
+}
+
 .page-shell.editor-active .controls-panel,
 .page-shell.editor-active .dropzone-card {
   border-color: rgba(122, 229, 198, 0.26);

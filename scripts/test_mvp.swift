@@ -107,6 +107,24 @@ final class TestRunner {
 
         await window.onePdfApp.handleFiles(files);
 
+        const appShell = document.querySelector('#app-shell');
+        const introPanel = document.querySelector('.intro-panel');
+        const workspace = document.querySelector('#workspace');
+        if (!appShell?.classList.contains('editor-active')) {
+          throw new Error('Expected app shell to switch into editor-active mode after upload');
+        }
+
+        const introPanelStyle = window.getComputedStyle(introPanel);
+        if (introPanelStyle.display !== 'none') {
+          throw new Error(`Expected intro panel to be hidden in editor mode, got display=${introPanelStyle.display}`);
+        }
+
+        const workspaceRect = workspace.getBoundingClientRect();
+        const editorRect = document.querySelector('#editor-panel').getBoundingClientRect();
+        if (editorRect.width < workspaceRect.width * 0.9) {
+          throw new Error(`Expected editor panel to expand to near full width, got editor=${editorRect.width} workspace=${workspaceRect.width}`);
+        }
+
         for (let attempt = 0; attempt < 40; attempt += 1) {
           const thumbnailCount = document.querySelectorAll('.page-thumbnail').length;
           if (thumbnailCount >= 5) {
