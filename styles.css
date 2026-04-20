@@ -769,6 +769,18 @@ h1 {
   line-height: 1.6;
 }
 
+.export-bar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 20;
+  padding: 18px;
+  border: 1px solid rgba(122, 229, 198, 0.18);
+  border-radius: var(--radius-lg);
+  background: rgba(12, 18, 31, 0.92);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+}
+
 .selection-summary {
   margin-top: 8px;
   margin-bottom: 18px;

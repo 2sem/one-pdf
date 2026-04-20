@@ -125,6 +125,11 @@ final class TestRunner {
           throw new Error(`Expected editor panel to expand to near full width, got editor=${editorRect.width} workspace=${workspaceRect.width}`);
         }
 
+        const exportBarStyle = window.getComputedStyle(document.querySelector('#export-bar'));
+        if (exportBarStyle.position !== 'sticky') {
+          throw new Error(`Expected export bar to use sticky positioning, got ${exportBarStyle.position}`);
+        }
+
         for (let attempt = 0; attempt < 40; attempt += 1) {
           const thumbnailCount = document.querySelectorAll('.page-thumbnail').length;
           if (thumbnailCount >= 5) {

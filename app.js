@@ -14,6 +14,7 @@ const elements = {
   fileCount: document.querySelector("#file-count"),
   selectedPages: document.querySelector("#selected-pages"),
   exportSummary: document.querySelector("#export-summary"),
+  exportBar: document.querySelector("#export-bar"),
   exportDetails: document.querySelector("#export-details"),
   exportFilename: document.querySelector("#export-filename"),
   appShell: document.querySelector("#app-shell"),
