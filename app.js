@@ -153,7 +153,7 @@ async function handleFiles(fileList) {
   }
 
   elements.sessionStatus.textContent = "Loading";
-  setFeedback("Reading PDF files locally in your browser...");
+  setFeedback("");
 
   for (const file of files) {
     try {
@@ -185,7 +185,7 @@ async function handleFiles(fileList) {
   if (state.documents.length) {
     syncSuggestedExportFilename();
     elements.sessionStatus.textContent = "Ready";
-    setFeedback("Every page starts included. Uncheck pages you want to exclude before exporting.");
+    setFeedback("");
 
     if (!hadDocumentsBefore) {
       focusEditorPanel();
@@ -446,7 +446,7 @@ function renderExportMeta() {
     elements.exportFilename.value = state.exportFilename;
   }
   elements.exportSummary.textContent = `${selectedPages} selected ${selectedPages === 1 ? "page" : "pages"}`;
-  elements.exportDetails.textContent = `Your export will include ${selectedFiles} ${selectedFiles === 1 ? "file" : "files"} and ${selectedPages} selected ${selectedPages === 1 ? "page" : "pages"}. Output name: ${exportFileName}`;
+  elements.exportDetails.textContent = `${selectedFiles} ${selectedFiles === 1 ? "file" : "files"} • ${selectedPages} ${selectedPages === 1 ? "page" : "pages"} • ${exportFileName}`;
 }
 
 function normalizeExportFilenameField() {

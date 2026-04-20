@@ -636,6 +636,10 @@ h1 {
   line-height: 1.6;
 }
 
+.feedback:empty {
+  display: none;
+}
+
 .file-list {
   display: grid;
   gap: 18px;
@@ -869,10 +873,6 @@ h1 {
   background: rgba(12, 18, 31, 0.92);
   backdrop-filter: blur(16px);
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-}
-
-.export-label {
-  margin-bottom: 6px;
 }
 
 .selection-summary {
