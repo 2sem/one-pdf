@@ -136,6 +136,11 @@ final class TestRunner {
           throw new Error('Expected advanced range controls to be collapsed by default');
         }
 
+        const selectionSummary = document.querySelector('.selection-summary');
+        if (selectionSummary?.hasAttribute('open')) {
+          throw new Error('Expected selection summary to be collapsed by default');
+        }
+
         const exportBarStyle = window.getComputedStyle(document.querySelector('#export-bar'));
         if (exportBarStyle.position !== 'sticky') {
           throw new Error(`Expected export bar to use sticky positioning, got ${exportBarStyle.position}`);

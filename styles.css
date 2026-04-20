@@ -648,7 +648,7 @@ h1 {
 
 .file-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr) 284px;
   gap: 18px;
   align-items: start;
 }
@@ -868,13 +868,34 @@ h1 {
 }
 
 .summary-heading-inline {
-  margin-bottom: 10px;
+  margin-bottom: 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.summary-heading-inline::-webkit-details-marker {
+  display: none;
 }
 
 .summary-heading-inline h3,
 .selection-title-inline {
   margin: 0;
   font-size: 1.55rem;
+}
+
+.summary-heading-inline::after {
+  content: "+";
+  color: var(--muted);
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.selection-summary[open] .summary-heading-inline {
+  margin-bottom: 10px;
+}
+
+.selection-summary[open] .summary-heading-inline::after {
+  content: "−";
 }
 
 .summary-metrics,
