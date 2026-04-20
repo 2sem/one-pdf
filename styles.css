@@ -128,7 +128,6 @@ body::before {
 
 .eyebrow,
 .panel-kicker,
-.file-tag,
 .export-label {
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -678,13 +677,6 @@ h1 {
   gap: 12px;
   align-items: center;
   margin-bottom: 10px;
-}
-
-.settings-kicker {
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.72rem;
-  color: var(--accent);
 }
 
 .file-card.is-dragging-file {
