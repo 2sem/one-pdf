@@ -68,7 +68,8 @@ window.onePdfApp = {
       name: documentState.name,
       pageCount: documentState.pageCount,
       selections: [...documentState.selections],
-      rangeDraft: documentState.rangeDraft,
+      includeRangeDraft: documentState.includeRangeDraft,
+      excludeRangeDraft: documentState.excludeRangeDraft,
     })),
 };
 
@@ -131,7 +132,8 @@ async function handleFiles(fileList) {
         bytes,
         pageCount,
         selections: Array(pageCount).fill(true),
-        rangeDraft: "",
+        includeRangeDraft: "",
+        excludeRangeDraft: "",
         thumbnails: Array(pageCount).fill(null),
         inflightThumbnails: new Set(),
         thumbnailStatus: "idle",
@@ -202,10 +204,15 @@ function render() {
     fileCard.querySelector(".file-name").textContent = documentState.name;
     fileCard.querySelector(".file-order-hint").textContent = `Merge order: file ${index + 1}`;
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
-    const rangeInput = fileCard.querySelector(".range-input");
-    rangeInput.value = documentState.rangeDraft;
-    rangeInput.addEventListener("input", () => {
-      documentState.rangeDraft = rangeInput.value;
+    const includeRangeInput = fileCard.querySelector(".include-range-input");
+    const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
+    includeRangeInput.value = documentState.includeRangeDraft;
+    excludeRangeInput.value = documentState.excludeRangeDraft;
+    includeRangeInput.addEventListener("input", () => {
+      documentState.includeRangeDraft = includeRangeInput.value;
+    });
+    excludeRangeInput.addEventListener("input", () => {
+      documentState.excludeRangeDraft = excludeRangeInput.value;
     });
 
     const moveUpButton = fileCard.querySelector(".move-up");
@@ -231,11 +238,11 @@ function render() {
     });
 
     fileCard.querySelector(".apply-include").addEventListener("click", () => {
-      applyRangeSelection(index, documentState.rangeDraft, "include");
+      applyRangeSelection(index, documentState.includeRangeDraft, "include");
     });
 
     fileCard.querySelector(".apply-exclude").addEventListener("click", () => {
-      applyRangeSelection(index, documentState.rangeDraft, "exclude");
+      applyRangeSelection(index, documentState.excludeRangeDraft, "exclude");
     });
 
     const pageGrid = fileCard.querySelector(".page-grid");
@@ -397,7 +404,8 @@ function renderSelectionSummary() {
 function getNormalizedExportFilename() {
   const rawName = state.exportFilename.trim() || getSuggestedExportBaseName();
   const trimmed = rawName.trim();
-  const safeBaseName = trimmed
+  const baseNameWithoutPdfSuffix = trimmed.replace(/(?:\.pdf)+$/i, "");
+  const safeBaseName = baseNameWithoutPdfSuffix
     .replace(/[\\/:*?"<>|]+/g, "-")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
@@ -591,14 +599,15 @@ function applyRangeSelection(documentIndex, rangeText, mode) {
   if (mode === "include") {
     documentState.selections = documentState.selections.map((_, index) => pageIndexes.has(index));
     setFeedback(`Applied include range ${parsedPages.summary} to ${documentState.name}.`);
+    documentState.includeRangeDraft = normalizedRange;
   } else {
     documentState.selections = documentState.selections.map((isSelected, index) => (
       pageIndexes.has(index) ? false : isSelected
     ));
     setFeedback(`Excluded range ${parsedPages.summary} from ${documentState.name}.`);
+    documentState.excludeRangeDraft = normalizedRange;
   }
 
-  documentState.rangeDraft = normalizedRange;
   render();
 }
 

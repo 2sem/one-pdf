@@ -629,6 +629,10 @@ h1 {
   margin-bottom: 10px;
 }
 
+.secondary-range-field {
+  margin-top: 12px;
+}
+
 .export-details {
   margin: 0;
   color: var(--muted);

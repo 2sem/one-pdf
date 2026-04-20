@@ -128,8 +128,25 @@ final class TestRunner {
           throw new Error(`Expected suggested export name to follow reordered first file, got ${exportNameAfterReorder}`);
         }
 
-        window.onePdfApp.applyRangeSelection(0, '1', 'include');
-        window.onePdfApp.applyRangeSelection(1, '2', 'exclude');
+        const includeInput = document.querySelector('.file-card .include-range-input');
+        includeInput.value = '1';
+        includeInput.dispatchEvent(new Event('input', { bubbles: true }));
+        document.querySelector('.file-card .apply-include').click();
+
+        const excludeInput = document.querySelectorAll('.exclude-range-input')[1];
+        excludeInput.value = '2';
+        excludeInput.dispatchEvent(new Event('input', { bubbles: true }));
+        document.querySelectorAll('.apply-exclude')[1].click();
+
+        const manualFilenameInput = document.querySelector('#export-filename');
+        manualFilenameInput.value = 'Paid_Applications_v120.pdf';
+        manualFilenameInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+        const exportDetails = document.querySelector('#export-details')?.textContent ?? '';
+        if (!exportDetails.includes('Paid_Applications_v120.pdf') || exportDetails.includes('.pdf.pdf')) {
+          throw new Error(`Expected normalized export filename in summary, got: ${exportDetails}`);
+        }
+
         await window.onePdfApp.exportMergedPdf();
 
         if (!capturedBlob) {
