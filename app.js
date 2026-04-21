@@ -244,13 +244,11 @@ function render() {
     fileCard.querySelector(".file-order-hint").textContent = "";
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount}p`;
     fileCard.querySelector(".drag-handle").title = state.documents.length > 1
-      ? `File ${index + 1} in merge order. Drag to reorder file`
+      ? `Drag to reorder file ${index + 1}`
       : "Add another PDF to enable reordering";
     fileCard.querySelector(".drag-handle").setAttribute(
       "aria-label",
-      state.documents.length > 1
-        ? `File ${index + 1} in merge order. Drag to reorder file`
-        : "Add another PDF to enable reordering",
+      state.documents.length > 1 ? `Drag to reorder file ${index + 1}` : "Add another PDF to enable reordering",
     );
     const includeRangeInput = fileCard.querySelector(".include-range-input");
     const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
