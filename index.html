@@ -335,7 +335,13 @@
 
             <section class="large-preview-panel">
               <button type="button" class="range-summary large-preview-summary">Large preview</button>
-              <div class="large-preview-meta"></div>
+              <div class="large-preview-toolbar">
+                <div class="large-preview-meta"></div>
+                <div class="large-preview-nav">
+                  <button type="button" class="chip-button compact-action preview-prev" aria-label="Preview previous page" title="Preview previous page">←</button>
+                  <button type="button" class="chip-button compact-action preview-next" aria-label="Preview next page" title="Preview next page">→</button>
+                </div>
+              </div>
               <div class="large-preview-frame" hidden>
                 <div class="large-preview-placeholder">Select a page to preview it larger.</div>
                 <img class="large-preview-image" alt="Large page preview" hidden />

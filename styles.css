@@ -737,9 +737,21 @@ h1 {
 }
 
 .large-preview-meta {
-  margin-top: 8px;
   color: var(--muted);
   font-size: 0.82rem;
+}
+
+.large-preview-toolbar {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.large-preview-nav {
+  display: flex;
+  gap: 6px;
 }
 
 .large-preview-frame {

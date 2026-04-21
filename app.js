@@ -262,6 +262,8 @@ function render() {
     const largePreviewFrame = fileCard.querySelector(".large-preview-frame");
     const largePreviewImage = fileCard.querySelector(".large-preview-image");
     const largePreviewPlaceholder = fileCard.querySelector(".large-preview-placeholder");
+    const largePreviewPrev = fileCard.querySelector(".preview-prev");
+    const largePreviewNext = fileCard.querySelector(".preview-next");
     includeRangeInput.value = documentState.includeRangeDraft;
     excludeRangeInput.value = documentState.excludeRangeDraft;
     largePreviewPanel.classList.toggle("is-open", documentState.largePreviewOpen);
@@ -270,6 +272,8 @@ function render() {
       ? `Hide preview • p${documentState.largePreviewPageIndex + 1}`
       : `Preview • p${documentState.largePreviewPageIndex + 1}`;
     largePreviewMeta.textContent = `Page ${documentState.largePreviewPageIndex + 1} of ${documentState.pageCount}`;
+    largePreviewPrev.disabled = documentState.largePreviewPageIndex === 0;
+    largePreviewNext.disabled = documentState.largePreviewPageIndex === documentState.pageCount - 1;
     updateLargePreviewPanel(documentState, largePreviewImage, largePreviewPlaceholder, largePreviewMeta, largePreviewFrame);
     largePreviewToggle.addEventListener("click", () => {
       documentState.largePreviewOpen = !documentState.largePreviewOpen;
@@ -277,6 +281,12 @@ function render() {
         void ensureLargePreview(documentState);
       }
       render();
+    });
+    largePreviewPrev.addEventListener("click", () => {
+      setLargePreviewPage(documentState, Math.max(0, documentState.largePreviewPageIndex - 1));
+    });
+    largePreviewNext.addEventListener("click", () => {
+      setLargePreviewPage(documentState, Math.min(documentState.pageCount - 1, documentState.largePreviewPageIndex + 1));
     });
     includeRangeInput.addEventListener("input", () => {
       documentState.includeRangeDraft = includeRangeInput.value;
