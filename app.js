@@ -438,10 +438,6 @@ function renderSelectionSummary() {
   elements.summaryFileList.replaceChildren();
 
   if (!state.documents.length) {
-    const empty = document.createElement("p");
-    empty.className = "summary-empty";
-    empty.textContent = "Add PDF files to see a per-file selection summary.";
-    elements.summaryFileList.append(empty);
     return;
   }
 
