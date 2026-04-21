@@ -169,9 +169,13 @@ async function handleFiles(fileList) {
         includeRangeDraft: "",
         excludeRangeDraft: "",
         thumbnails: Array(pageCount).fill(null),
-        inflightThumbnails: new Set(),
+        thumbnailPromises: new Map(),
         thumbnailStatus: "idle",
         pdfjsDocumentPromise: null,
+        largePreviewOpen: false,
+        largePreviewPageIndex: 0,
+        largePreviewStatus: "idle",
+        largePreviewDataUrl: null,
       });
     } catch (error) {
       console.error(error);
@@ -252,8 +256,26 @@ function render() {
     );
     const includeRangeInput = fileCard.querySelector(".include-range-input");
     const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
+    const largePreviewPanel = fileCard.querySelector(".large-preview-panel");
+    const largePreviewToggle = fileCard.querySelector(".large-preview-summary");
+    const largePreviewMeta = fileCard.querySelector(".large-preview-meta");
+    const largePreviewFrame = fileCard.querySelector(".large-preview-frame");
+    const largePreviewImage = fileCard.querySelector(".large-preview-image");
+    const largePreviewPlaceholder = fileCard.querySelector(".large-preview-placeholder");
     includeRangeInput.value = documentState.includeRangeDraft;
     excludeRangeInput.value = documentState.excludeRangeDraft;
+    largePreviewPanel.classList.toggle("is-open", documentState.largePreviewOpen);
+    largePreviewFrame.hidden = !documentState.largePreviewOpen;
+    largePreviewToggle.textContent = documentState.largePreviewOpen ? "Hide preview" : "Large preview";
+    largePreviewMeta.textContent = `Page ${documentState.largePreviewPageIndex + 1} of ${documentState.pageCount}`;
+    updateLargePreviewPanel(documentState, largePreviewImage, largePreviewPlaceholder, largePreviewMeta, largePreviewFrame);
+    largePreviewToggle.addEventListener("click", () => {
+      documentState.largePreviewOpen = !documentState.largePreviewOpen;
+      if (documentState.largePreviewOpen) {
+        void ensureLargePreview(documentState);
+      }
+      render();
+    });
     includeRangeInput.addEventListener("input", () => {
       documentState.includeRangeDraft = includeRangeInput.value;
     });
@@ -314,6 +336,9 @@ function render() {
       const label = document.createElement("label");
       label.htmlFor = checkboxId;
       label.innerHTML = createPageCardMarkup(documentState, index, input.checked);
+      label.addEventListener("click", () => {
+        setLargePreviewPage(documentState, index);
+      });
 
       wrapper.append(input, label);
       pageGrid.append(wrapper);
@@ -750,6 +775,17 @@ function createPageCardMarkup(documentState, pageIndex, isSelected) {
   return `${thumbnailMarkup}<strong>${pageIndex + 1}</strong><span>${isSelected ? "Included" : "Excluded"}</span>`;
 }
 
+function setLargePreviewPage(documentState, pageIndex) {
+  documentState.largePreviewPageIndex = pageIndex;
+  documentState.largePreviewDataUrl = null;
+
+  if (documentState.largePreviewOpen) {
+    void ensureLargePreview(documentState);
+  }
+
+  scheduleRender();
+}
+
 function getThumbnailPlaceholderText(status) {
   if (status === "error") {
     return "Preview unavailable";
@@ -810,40 +846,105 @@ async function ensureThumbnailForPage(documentId, pageIndex) {
     return;
   }
 
-  if (documentState.thumbnails[pageIndex] || documentState.inflightThumbnails.has(pageIndex)) {
+  if (documentState.thumbnails[pageIndex]) {
     return;
   }
 
-  documentState.inflightThumbnails.add(pageIndex);
-  documentState.thumbnailStatus = "loading";
+  const existingPromise = documentState.thumbnailPromises.get(pageIndex);
+  if (existingPromise) {
+    await existingPromise;
+    return;
+  }
+
+  const thumbnailPromise = (async () => {
+    documentState.thumbnailStatus = "loading";
+
+    try {
+      const pdf = await getPdfjsDocument(documentState);
+      const page = await pdf.getPage(pageIndex + 1);
+      const viewport = page.getViewport({ scale: 0.24 });
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      if (!context) {
+        throw new Error("Could not create a canvas context.");
+      }
+
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+
+      await page.render({ canvasContext: context, viewport }).promise;
+      documentState.thumbnails[pageIndex] = canvas.toDataURL("image/jpeg", 0.74);
+      updateThumbnailNode(documentId, pageIndex, documentState.thumbnails[pageIndex], pageIndex + 1);
+
+      if (documentState.thumbnails.every((thumbnail) => thumbnail !== null)) {
+        documentState.thumbnailStatus = "ready";
+      }
+    } catch (error) {
+      console.error(error);
+      documentState.thumbnailStatus = "error";
+      scheduleRender();
+    } finally {
+      documentState.thumbnailPromises.delete(pageIndex);
+    }
+  })();
+
+  documentState.thumbnailPromises.set(pageIndex, thumbnailPromise);
+  await thumbnailPromise;
+}
+
+async function ensureLargePreview(documentState) {
+  if (!documentState.largePreviewOpen) {
+    return;
+  }
+
+  documentState.largePreviewStatus = "loading";
+  scheduleRender();
 
   try {
-    const pdf = await getPdfjsDocument(documentState);
-    const page = await pdf.getPage(pageIndex + 1);
-    const viewport = page.getViewport({ scale: 0.24 });
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-
-    if (!context) {
-      throw new Error("Could not create a canvas context.");
+    if (!documentState.thumbnails[documentState.largePreviewPageIndex]) {
+      await ensureThumbnailForPage(documentState.id, documentState.largePreviewPageIndex);
     }
 
-    canvas.width = Math.ceil(viewport.width);
-    canvas.height = Math.ceil(viewport.height);
-
-    await page.render({ canvasContext: context, viewport }).promise;
-    documentState.thumbnails[pageIndex] = canvas.toDataURL("image/jpeg", 0.74);
-    updateThumbnailNode(documentId, pageIndex, documentState.thumbnails[pageIndex], pageIndex + 1);
-
-    if (documentState.thumbnails.every((thumbnail) => thumbnail !== null)) {
-      documentState.thumbnailStatus = "ready";
-    }
+    documentState.largePreviewDataUrl = documentState.thumbnails[documentState.largePreviewPageIndex];
+    documentState.largePreviewStatus = "ready";
+    scheduleRender();
   } catch (error) {
     console.error(error);
-    documentState.thumbnailStatus = "error";
+    documentState.largePreviewStatus = "error";
     scheduleRender();
-  } finally {
-    documentState.inflightThumbnails.delete(pageIndex);
+  }
+}
+
+function updateLargePreviewPanel(documentState, imageElement, placeholderElement, metaElement, frameElement) {
+  metaElement.textContent = `Page ${documentState.largePreviewPageIndex + 1} of ${documentState.pageCount}`;
+  frameElement.hidden = !documentState.largePreviewOpen;
+
+  if (!documentState.largePreviewOpen) {
+    imageElement.hidden = true;
+    placeholderElement.hidden = false;
+    placeholderElement.textContent = "Select a page to preview it larger.";
+    return;
+  }
+
+  const previewSource = documentState.thumbnails[documentState.largePreviewPageIndex] || documentState.largePreviewDataUrl;
+
+  if (previewSource) {
+    imageElement.hidden = false;
+    imageElement.src = previewSource;
+    imageElement.alt = `Large preview of page ${documentState.largePreviewPageIndex + 1}`;
+    placeholderElement.hidden = true;
+    return;
+  }
+
+  imageElement.hidden = true;
+  placeholderElement.hidden = false;
+  placeholderElement.textContent = documentState.largePreviewStatus === "error"
+    ? "Large preview unavailable."
+    : "Rendering larger preview...";
+
+  if (documentState.largePreviewStatus !== "loading") {
+    void ensureLargePreview(documentState);
   }
 }
 

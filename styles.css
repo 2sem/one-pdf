@@ -728,6 +728,44 @@ h1 {
   background: transparent;
 }
 
+.large-preview-panel {
+  margin: 8px 0;
+}
+
+.large-preview-summary {
+  width: 100%;
+}
+
+.large-preview-meta {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.large-preview-frame {
+  margin-top: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.015);
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.large-preview-placeholder {
+  color: var(--muted);
+  font-size: 0.88rem;
+  padding: 16px;
+  text-align: center;
+}
+
+.large-preview-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .range-controls summary {
   list-style: none;
 }

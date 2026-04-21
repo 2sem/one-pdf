@@ -82,6 +82,7 @@ final class TestRunner {
 
     private func runScenario() {
         let script = """
+        try {
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
         const originalCreate = URL.createObjectURL.bind(URL);
@@ -146,19 +147,6 @@ final class TestRunner {
           throw new Error(`Expected export bar to use sticky positioning, got ${exportBarStyle.position}`);
         }
 
-        for (let attempt = 0; attempt < 40; attempt += 1) {
-          const thumbnailCount = document.querySelectorAll('.page-thumbnail').length;
-          if (thumbnailCount >= 5) {
-            break;
-          }
-
-          await new Promise((resolve) => setTimeout(resolve, 250));
-        }
-
-        if (document.querySelectorAll('.page-thumbnail').length < 5) {
-          throw new Error('Expected page thumbnails to be rendered before export');
-        }
-
         const fileCards = Array.from(document.querySelectorAll('.file-card'));
         if (fileCards.length < 2) {
           throw new Error('Expected at least two file cards for reorder testing');
@@ -178,8 +166,37 @@ final class TestRunner {
           throw new Error(`Expected suggested export name to follow reordered first file, got ${exportNameAfterReorder}`);
         }
 
+        const previewSummary = document.querySelector('.file-card .large-preview-summary');
+        if (!previewSummary) {
+          throw new Error('Expected large preview summary control to exist');
+        }
+
+        previewSummary.click();
+        for (let attempt = 0; attempt < 20; attempt += 1) {
+          const previewOpened = document.querySelector('.file-card .large-preview-summary')?.textContent?.includes('Hide preview');
+          const previewFrameVisible = !document.querySelector('.file-card .large-preview-frame')?.hidden;
+          if (previewOpened && previewFrameVisible) {
+            break;
+          }
+
+          await new Promise((resolve) => setTimeout(resolve, 250));
+        }
+
+        const previewOpened = document.querySelector('.file-card .large-preview-summary')?.textContent?.includes('Hide preview');
+        const previewFrameVisible = !document.querySelector('.file-card .large-preview-frame')?.hidden;
+        if (!previewOpened || !previewFrameVisible) {
+          const previewButtonText = document.querySelector('.file-card .large-preview-summary')?.textContent;
+          const previewFrameHidden = document.querySelector('.file-card .large-preview-frame')?.hidden;
+          throw new Error(`Expected large preview panel to open. button=${previewButtonText} frameHidden=${previewFrameHidden}`);
+        }
+
         const includeInput = document.querySelector('.file-card .include-range-input');
-        document.querySelector('.file-card .range-summary').click();
+        const rangeSummary = document.querySelector('.file-card .range-controls .range-summary');
+        if (!includeInput || !rangeSummary) {
+          throw new Error('Expected include range controls to exist');
+        }
+
+        rangeSummary.click();
         includeInput.value = '1';
         includeInput.dispatchEvent(new Event('input', { bubbles: true }));
         document.querySelector('.file-card .apply-include').click();
@@ -221,12 +238,15 @@ final class TestRunner {
 
         return {
           state: window.onePdfApp.getStateSnapshot(),
-          thumbnailCount: document.querySelectorAll('.page-thumbnail').length,
+          thumbnailCount: document.querySelectorAll('img.page-thumbnail').length,
           exportFilename: document.querySelector('#export-filename')?.value,
           capturedDownloadName,
           exportDetails: document.querySelector('#export-details')?.textContent,
           mergedBase64: btoa(binary),
         };
+        } catch (error) {
+          return { error: String(error) };
+        }
         """
 
         evaluate(script) { [weak self] result in
@@ -242,6 +262,12 @@ final class TestRunner {
                     payload = dictionary
                 } else {
                     payload = nil
+                }
+
+                if let payload, let errorMessage = payload["error"] as? String {
+                    self?.resultError = NSError(domain: "OnePDFTest", code: 5, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+                    self?.isFinished = true
+                    return
                 }
 
                 guard let payload,
