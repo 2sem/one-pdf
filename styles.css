@@ -811,16 +811,17 @@ h1 {
 .selection-summary {
   margin-top: 4px;
   margin-bottom: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.015);
+  padding: 4px 0;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
 }
 
 .summary-heading-inline {
   margin-bottom: 0;
   list-style: none;
   cursor: pointer;
+  padding: 2px 0;
 }
 
 .summary-heading-inline::-webkit-details-marker {
@@ -830,7 +831,7 @@ h1 {
 .summary-heading-inline h3,
 .selection-title-inline {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .summary-heading-inline::after {
@@ -842,6 +843,13 @@ h1 {
 
 .selection-summary[open] .summary-heading-inline {
   margin-bottom: 10px;
+}
+
+.selection-summary[open] {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.015);
 }
 
 .selection-summary[open] .summary-heading-inline::after {
