@@ -15,7 +15,6 @@ const elements = {
   selectedPages: document.querySelector("#selected-pages"),
   exportSummary: document.querySelector("#export-summary"),
   exportBar: document.querySelector("#export-bar"),
-  exportDetails: document.querySelector("#export-details"),
   exportFilename: document.querySelector("#export-filename"),
   appShell: document.querySelector("#app-shell"),
   workspace: document.querySelector("#workspace"),
@@ -416,13 +415,11 @@ function getSelectedFileCount() {
 function renderExportMeta() {
   const selectedPages = getSelectedPageCount();
   const selectedFiles = getSelectedFileCount();
-  const exportFileName = getNormalizedExportFilename();
 
   if (elements.exportFilename.value !== state.exportFilename) {
     elements.exportFilename.value = state.exportFilename;
   }
   elements.exportSummary.textContent = `${selectedPages} ${selectedPages === 1 ? "page" : "pages"}`;
-  elements.exportDetails.textContent = `${selectedFiles}f • ${selectedPages}p • ${exportFileName}`;
 }
 
 function normalizeExportFilenameField() {

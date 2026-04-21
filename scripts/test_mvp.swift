@@ -193,9 +193,9 @@ final class TestRunner {
         manualFilenameInput.value = 'Paid_Applications_v120.pdf';
         manualFilenameInput.dispatchEvent(new Event('input', { bubbles: true }));
 
-        const exportDetails = document.querySelector('#export-details')?.textContent ?? '';
-        if (!exportDetails.includes('Paid_Applications_v120.pdf') || exportDetails.includes('.pdf.pdf')) {
-          throw new Error(`Expected normalized export filename in summary, got: ${exportDetails}`);
+        const normalizedFilenameField = document.querySelector('#export-filename')?.value ?? '';
+        if (normalizedFilenameField.includes('.pdf.pdf')) {
+          throw new Error(`Expected normalized export filename field, got: ${normalizedFilenameField}`);
         }
 
         await window.onePdfApp.exportMergedPdf();
