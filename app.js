@@ -809,6 +809,7 @@ function setLargePreviewPage(documentState, pageIndex) {
   documentState.largePreviewOpen = true;
 
   void ensureLargePreview(documentState);
+  focusPreviewedThumbnail(documentState.id, pageIndex);
 
   scheduleRender();
 }
@@ -1037,6 +1038,16 @@ function updateThumbnailNode(documentId, pageIndex, thumbnailUrl, pageNumber) {
   image.alt = `Preview of page ${pageNumber}`;
   image.loading = "lazy";
   currentThumbnail.replaceWith(image);
+}
+
+function focusPreviewedThumbnail(documentId, pageIndex) {
+  window.requestAnimationFrame(() => {
+    const pageToggle = elements.fileList.querySelector(
+      `.page-toggle[data-document-id="${documentId}"][data-page-index="${pageIndex}"]`,
+    );
+
+    pageToggle?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+  });
 }
 
 function attachFileDragHandlers(fileCard, documentId) {
