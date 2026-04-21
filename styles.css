@@ -440,7 +440,6 @@ h1 {
 .flow-steps article p,
 .feedback,
 .file-meta,
-.drag-hint,
 .page-toggle span,
 .page-hint,
 .trust-grid p {
@@ -683,10 +682,6 @@ h1 {
 
 .file-tag {
   margin-bottom: 4px;
-}
-
-.drag-hint {
-  font-size: 0.84rem;
 }
 
 .drag-row {

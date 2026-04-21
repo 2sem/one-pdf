@@ -244,9 +244,13 @@ function render() {
     fileCard.querySelector(".file-name").textContent = documentState.name;
     fileCard.querySelector(".file-order-hint").textContent = `Merge order: file ${index + 1}`;
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
-    fileCard.querySelector(".drag-hint").textContent = state.documents.length > 1
-      ? "Drag to reorder"
+    fileCard.querySelector(".drag-handle").title = state.documents.length > 1
+      ? "Drag to reorder file"
       : "Add another PDF to enable reordering";
+    fileCard.querySelector(".drag-handle").setAttribute(
+      "aria-label",
+      state.documents.length > 1 ? "Drag to reorder file" : "Add another PDF to enable reordering",
+    );
     const includeRangeInput = fileCard.querySelector(".include-range-input");
     const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
     includeRangeInput.value = documentState.includeRangeDraft;
