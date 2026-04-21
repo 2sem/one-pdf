@@ -670,6 +670,10 @@ h1 {
   font-size: 0.74rem;
 }
 
+.file-order-hint:empty {
+  display: none;
+}
+
 .file-card-header {
   align-items: center;
   margin-bottom: 4px;

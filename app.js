@@ -242,14 +242,16 @@ function render() {
     attachFileDragHandlers(fileCard, documentState.id);
 
     fileCard.querySelector(".file-name").textContent = documentState.name;
-    fileCard.querySelector(".file-order-hint").textContent = `#${index + 1}`;
+    fileCard.querySelector(".file-order-hint").textContent = "";
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount}p • ${formatBytes(documentState.size)}`;
     fileCard.querySelector(".drag-handle").title = state.documents.length > 1
-      ? "Drag to reorder file"
+      ? `File ${index + 1} in merge order. Drag to reorder file`
       : "Add another PDF to enable reordering";
     fileCard.querySelector(".drag-handle").setAttribute(
       "aria-label",
-      state.documents.length > 1 ? "Drag to reorder file" : "Add another PDF to enable reordering",
+      state.documents.length > 1
+        ? `File ${index + 1} in merge order. Drag to reorder file`
+        : "Add another PDF to enable reordering",
     );
     const includeRangeInput = fileCard.querySelector(".include-range-input");
     const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
