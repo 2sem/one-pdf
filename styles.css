@@ -605,10 +605,10 @@ h1 {
 .file-settings-panel {
   position: sticky;
   top: 96px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.025);
-  padding: 12px;
+  background: rgba(255, 255, 255, 0.015);
+  padding: 10px;
 }
 
 .file-card.is-dragging-file {
@@ -653,7 +653,7 @@ h1 {
 .file-card-side {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .file-order-hint {
