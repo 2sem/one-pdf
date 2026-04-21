@@ -176,6 +176,8 @@ async function handleFiles(fileList) {
         largePreviewPageIndex: 0,
         largePreviewStatus: "idle",
         largePreviewDataUrl: null,
+        largePreviewPromise: null,
+        largePreviewRenderToken: 0,
       });
     } catch (error) {
       console.error(error);
@@ -793,6 +795,8 @@ function createPageCardMarkup(documentState, pageIndex, isSelected) {
 function setLargePreviewPage(documentState, pageIndex) {
   documentState.largePreviewPageIndex = pageIndex;
   documentState.largePreviewDataUrl = null;
+  documentState.largePreviewPromise = null;
+  documentState.largePreviewRenderToken += 1;
 
   if (documentState.largePreviewOpen) {
     void ensureLargePreview(documentState);
@@ -913,22 +917,53 @@ async function ensureLargePreview(documentState) {
     return;
   }
 
+   const existingPromise = documentState.largePreviewPromise;
+   if (existingPromise) {
+    await existingPromise;
+    return;
+   }
+
+  const renderToken = ++documentState.largePreviewRenderToken;
   documentState.largePreviewStatus = "loading";
   scheduleRender();
 
-  try {
-    if (!documentState.thumbnails[documentState.largePreviewPageIndex]) {
-      await ensureThumbnailForPage(documentState.id, documentState.largePreviewPageIndex);
-    }
+  const largePreviewPromise = (async () => {
+    try {
+      const pdf = await getPdfjsDocument(documentState);
+      const page = await pdf.getPage(documentState.largePreviewPageIndex + 1);
+      const viewport = page.getViewport({ scale: 0.9 });
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
 
-    documentState.largePreviewDataUrl = documentState.thumbnails[documentState.largePreviewPageIndex];
-    documentState.largePreviewStatus = "ready";
-    scheduleRender();
-  } catch (error) {
-    console.error(error);
-    documentState.largePreviewStatus = "error";
-    scheduleRender();
-  }
+      if (!context) {
+        throw new Error("Could not create a canvas context.");
+      }
+
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+
+      await page.render({ canvasContext: context, viewport }).promise;
+
+      if (renderToken !== documentState.largePreviewRenderToken) {
+        return;
+      }
+
+      documentState.largePreviewDataUrl = canvas.toDataURL("image/jpeg", 0.86);
+      documentState.largePreviewStatus = "ready";
+      scheduleRender();
+    } catch (error) {
+      console.error(error);
+      documentState.largePreviewStatus = "error";
+      scheduleRender();
+    } finally {
+      if (documentState.largePreviewPromise === largePreviewPromise) {
+        documentState.largePreviewPromise = null;
+      }
+    }
+  })();
+
+  documentState.largePreviewPromise = largePreviewPromise;
+  await largePreviewPromise;
 }
 
 function updateLargePreviewPanel(documentState, imageElement, placeholderElement, metaElement, frameElement) {
@@ -942,7 +977,7 @@ function updateLargePreviewPanel(documentState, imageElement, placeholderElement
     return;
   }
 
-  const previewSource = documentState.thumbnails[documentState.largePreviewPageIndex] || documentState.largePreviewDataUrl;
+  const previewSource = documentState.largePreviewDataUrl || documentState.thumbnails[documentState.largePreviewPageIndex];
 
   if (previewSource) {
     imageElement.hidden = false;
