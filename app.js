@@ -243,7 +243,7 @@ function render() {
 
     fileCard.querySelector(".file-name").textContent = documentState.name;
     fileCard.querySelector(".file-order-hint").textContent = "";
-    fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount}p • ${formatBytes(documentState.size)}`;
+    fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount}p`;
     fileCard.querySelector(".drag-handle").title = state.documents.length > 1
       ? `File ${index + 1} in merge order. Drag to reorder file`
       : "Add another PDF to enable reordering";
