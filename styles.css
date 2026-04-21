@@ -747,7 +747,7 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.015);
-  min-height: 220px;
+  min-height: 260px;
   display: grid;
   place-items: center;
   overflow: hidden;

@@ -266,7 +266,9 @@ function render() {
     excludeRangeInput.value = documentState.excludeRangeDraft;
     largePreviewPanel.classList.toggle("is-open", documentState.largePreviewOpen);
     largePreviewFrame.hidden = !documentState.largePreviewOpen;
-    largePreviewToggle.textContent = documentState.largePreviewOpen ? "Hide preview" : "Large preview";
+    largePreviewToggle.textContent = documentState.largePreviewOpen
+      ? `Hide preview • p${documentState.largePreviewPageIndex + 1}`
+      : `Preview • p${documentState.largePreviewPageIndex + 1}`;
     largePreviewMeta.textContent = `Page ${documentState.largePreviewPageIndex + 1} of ${documentState.pageCount}`;
     updateLargePreviewPanel(documentState, largePreviewImage, largePreviewPlaceholder, largePreviewMeta, largePreviewFrame);
     largePreviewToggle.addEventListener("click", () => {
