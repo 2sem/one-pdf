@@ -289,6 +289,27 @@ function render() {
       }
       render();
     });
+    largePreviewPanel.addEventListener("keydown", (event) => {
+      if (!documentState.largePreviewOpen) {
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setLargePreviewPage(documentState, Math.max(0, documentState.largePreviewPageIndex - 1));
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setLargePreviewPage(documentState, Math.min(documentState.pageCount - 1, documentState.largePreviewPageIndex + 1));
+      }
+
+      if (event.key === " " || event.key === "Enter") {
+        event.preventDefault();
+        documentState.selections[documentState.largePreviewPageIndex] = !documentState.selections[documentState.largePreviewPageIndex];
+        render();
+      }
+    });
     largePreviewPrev.addEventListener("click", () => {
       setLargePreviewPage(documentState, Math.max(0, documentState.largePreviewPageIndex - 1));
     });

@@ -732,6 +732,11 @@ h1 {
   margin: 8px 0;
 }
 
+.large-preview-panel:focus-visible {
+  outline: 1px solid rgba(107, 183, 255, 0.55);
+  outline-offset: 4px;
+}
+
 .large-preview-summary {
   width: 100%;
 }
