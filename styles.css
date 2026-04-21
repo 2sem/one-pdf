@@ -369,7 +369,7 @@ h1 {
   justify-content: flex-end;
   gap: 12px;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .editor-upload-actions {
@@ -773,9 +773,9 @@ h1 {
 }
 
 .export-controls {
-  margin-top: 6px;
-  margin-bottom: 12px;
-  padding: 12px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.025);
@@ -813,9 +813,9 @@ h1 {
 }
 
 .selection-summary {
-  margin-top: 6px;
-  margin-bottom: 14px;
-  padding: 12px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.025);
