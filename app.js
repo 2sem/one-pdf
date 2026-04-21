@@ -266,6 +266,8 @@ function render() {
     const largePreviewPlaceholder = fileCard.querySelector(".large-preview-placeholder");
     const largePreviewPrev = fileCard.querySelector(".preview-prev");
     const largePreviewNext = fileCard.querySelector(".preview-next");
+    const largePreviewStatus = fileCard.querySelector(".large-preview-status");
+    const largePreviewToggleSelection = fileCard.querySelector(".preview-toggle-selection");
     includeRangeInput.value = documentState.includeRangeDraft;
     excludeRangeInput.value = documentState.excludeRangeDraft;
     largePreviewPanel.classList.toggle("is-open", documentState.largePreviewOpen);
@@ -276,6 +278,9 @@ function render() {
     largePreviewMeta.textContent = `Page ${documentState.largePreviewPageIndex + 1} of ${documentState.pageCount}`;
     largePreviewPrev.disabled = documentState.largePreviewPageIndex === 0;
     largePreviewNext.disabled = documentState.largePreviewPageIndex === documentState.pageCount - 1;
+    const previewSelection = documentState.selections[documentState.largePreviewPageIndex];
+    largePreviewStatus.textContent = previewSelection ? "Included" : "Excluded";
+    largePreviewToggleSelection.textContent = previewSelection ? "Exclude page" : "Include page";
     updateLargePreviewPanel(documentState, largePreviewImage, largePreviewPlaceholder, largePreviewMeta, largePreviewFrame);
     largePreviewToggle.addEventListener("click", () => {
       documentState.largePreviewOpen = !documentState.largePreviewOpen;
@@ -289,6 +294,10 @@ function render() {
     });
     largePreviewNext.addEventListener("click", () => {
       setLargePreviewPage(documentState, Math.min(documentState.pageCount - 1, documentState.largePreviewPageIndex + 1));
+    });
+    largePreviewToggleSelection.addEventListener("click", () => {
+      documentState.selections[documentState.largePreviewPageIndex] = !documentState.selections[documentState.largePreviewPageIndex];
+      render();
     });
     includeRangeInput.addEventListener("input", () => {
       documentState.includeRangeDraft = includeRangeInput.value;

@@ -754,6 +754,19 @@ h1 {
   gap: 6px;
 }
 
+.large-preview-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.large-preview-status {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 .large-preview-frame {
   margin-top: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
