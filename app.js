@@ -203,7 +203,7 @@ function resetSession() {
   state.dragState.dropTargetDocumentId = null;
   state.dragState.dropPosition = null;
   disconnectThumbnailObserver();
-  setFeedback("Add PDF files to start selecting pages.");
+  setFeedback("");
   elements.sessionStatus.textContent = "Idle";
   render();
 }
