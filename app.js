@@ -806,10 +806,9 @@ function setLargePreviewPage(documentState, pageIndex) {
   documentState.largePreviewDataUrl = null;
   documentState.largePreviewPromise = null;
   documentState.largePreviewRenderToken += 1;
+  documentState.largePreviewOpen = true;
 
-  if (documentState.largePreviewOpen) {
-    void ensureLargePreview(documentState);
-  }
+  void ensureLargePreview(documentState);
 
   scheduleRender();
 }

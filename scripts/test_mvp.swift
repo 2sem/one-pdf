@@ -166,12 +166,7 @@ final class TestRunner {
           throw new Error(`Expected suggested export name to follow reordered first file, got ${exportNameAfterReorder}`);
         }
 
-        const previewSummary = document.querySelector('.file-card .large-preview-summary');
-        if (!previewSummary) {
-          throw new Error('Expected large preview summary control to exist');
-        }
-
-        previewSummary.click();
+        document.querySelector('.file-card .page-toggle label').click();
         for (let attempt = 0; attempt < 20; attempt += 1) {
           const previewOpened = document.querySelector('.file-card .large-preview-summary')?.textContent?.includes('Hide preview');
           const previewFrameVisible = !document.querySelector('.file-card .large-preview-frame')?.hidden;
