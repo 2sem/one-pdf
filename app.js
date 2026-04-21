@@ -245,7 +245,7 @@ function render() {
     fileCard.querySelector(".file-order-hint").textContent = `Merge order: file ${index + 1}`;
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
     fileCard.querySelector(".drag-hint").textContent = state.documents.length > 1
-      ? "Drag to reorder file"
+      ? "Drag to reorder"
       : "Add another PDF to enable reordering";
     const includeRangeInput = fileCard.querySelector(".include-range-input");
     const excludeRangeInput = fileCard.querySelector(".exclude-range-input");
