@@ -772,6 +772,13 @@ h1 {
   font-size: 0.82rem;
 }
 
+.large-preview-shortcuts {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
 .large-preview-frame {
   margin-top: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1091,7 +1098,7 @@ h1 {
 }
 
 .page-toggle.is-preview-page label {
-  box-shadow: inset 0 0 0 2px rgba(107, 183, 255, 0.65);
+  box-shadow: inset 0 0 0 2px rgba(107, 183, 255, 0.65), 0 0 0 1px rgba(107, 183, 255, 0.12);
 }
 
 .page-toggle input:not(:checked) + label {

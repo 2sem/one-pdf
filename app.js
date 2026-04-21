@@ -280,7 +280,7 @@ function render() {
     largePreviewNext.disabled = documentState.largePreviewPageIndex === documentState.pageCount - 1;
     const previewSelection = documentState.selections[documentState.largePreviewPageIndex];
     largePreviewStatus.textContent = previewSelection ? "Included" : "Excluded";
-    largePreviewToggleSelection.textContent = previewSelection ? "Exclude page" : "Include page";
+    largePreviewToggleSelection.textContent = previewSelection ? "Exclude" : "Include";
     updateLargePreviewPanel(documentState, largePreviewImage, largePreviewPlaceholder, largePreviewMeta, largePreviewFrame);
     largePreviewToggle.addEventListener("click", () => {
       documentState.largePreviewOpen = !documentState.largePreviewOpen;
