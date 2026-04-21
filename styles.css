@@ -706,19 +706,19 @@ h1 {
 
 .file-order-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
   justify-content: flex-end;
 }
 
 .icon-button {
-  min-width: 40px;
-  padding: 8px 10px;
+  min-width: 36px;
+  padding: 7px 9px;
   font-weight: 700;
 }
 
 .file-actions {
-  margin: 10px 0;
+  margin: 8px 0;
   flex-wrap: wrap;
 }
 
@@ -743,7 +743,7 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 9px 11px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.015);
@@ -764,7 +764,7 @@ h1 {
 .range-controls[open] .range-field,
 .range-controls[open] .range-actions,
 .range-controls[open] .range-help {
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .export-controls {
@@ -785,7 +785,7 @@ h1 {
 }
 
 .secondary-range-field {
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .export-details {
@@ -936,7 +936,7 @@ h1 {
   background: rgba(255, 255, 255, 0.04);
   color: var(--text);
   font: inherit;
-  padding: 12px 14px;
+  padding: 10px 12px;
 }
 
 .range-input:focus {
@@ -946,9 +946,9 @@ h1 {
 
 .range-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .range-help {
@@ -959,7 +959,7 @@ h1 {
 
 .chip-button,
 .ghost-button {
-  padding: 10px 14px;
+  padding: 8px 12px;
 }
 
 .page-grid {
