@@ -800,7 +800,7 @@ h1 {
   position: sticky;
   bottom: 16px;
   z-index: 20;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border: 1px solid rgba(122, 229, 198, 0.18);
   border-radius: var(--radius-lg);
   background: rgba(12, 18, 31, 0.92);

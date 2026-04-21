@@ -219,7 +219,7 @@ function render() {
   elements.fileCount.textContent = String(state.documents.length);
   elements.selectedPages.textContent = String(selectedCount);
   elements.mergeButton.disabled = selectedCount === 0 || state.exporting;
-  elements.mergeButton.textContent = state.exporting ? "Exporting..." : "Export one PDF";
+  elements.mergeButton.textContent = state.exporting ? "Exporting..." : "Export PDF";
   renderEditorState();
   renderExportMeta();
   renderSelectionSummary();
