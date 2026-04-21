@@ -243,7 +243,7 @@ function render() {
 
     fileCard.querySelector(".file-name").textContent = documentState.name;
     fileCard.querySelector(".file-order-hint").textContent = `#${index + 1}`;
-    fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
+    fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount}p • ${formatBytes(documentState.size)}`;
     fileCard.querySelector(".drag-handle").title = state.documents.length > 1
       ? "Drag to reorder file"
       : "Add another PDF to enable reordering";
@@ -419,8 +419,8 @@ function renderExportMeta() {
   if (elements.exportFilename.value !== state.exportFilename) {
     elements.exportFilename.value = state.exportFilename;
   }
-  elements.exportSummary.textContent = `${selectedPages} selected ${selectedPages === 1 ? "page" : "pages"}`;
-  elements.exportDetails.textContent = `${selectedFiles} ${selectedFiles === 1 ? "file" : "files"} • ${selectedPages} ${selectedPages === 1 ? "page" : "pages"} • ${exportFileName}`;
+  elements.exportSummary.textContent = `${selectedPages} ${selectedPages === 1 ? "page" : "pages"}`;
+  elements.exportDetails.textContent = `${selectedFiles}f • ${selectedPages}p • ${exportFileName}`;
 }
 
 function normalizeExportFilenameField() {
