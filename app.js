@@ -320,6 +320,9 @@ function render() {
     documentState.selections.forEach((isSelected, index) => {
       const wrapper = document.createElement("div");
       wrapper.className = "page-toggle";
+      if (documentState.largePreviewPageIndex === index) {
+        wrapper.classList.add("is-preview-page");
+      }
       wrapper.dataset.documentId = documentState.id;
       wrapper.dataset.pageIndex = String(index);
 
