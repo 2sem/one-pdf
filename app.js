@@ -815,11 +815,14 @@ function parsePageRange(rangeText, maxPage) {
 
 function createPageCardMarkup(documentState, pageIndex, isSelected) {
   const thumbnail = documentState.thumbnails[pageIndex];
+  const previewBadge = documentState.largePreviewPageIndex === pageIndex
+    ? '<span class="page-preview-badge">Preview</span>'
+    : "";
   const thumbnailMarkup = thumbnail
     ? `<img class="page-thumbnail" src="${thumbnail}" alt="Preview of page ${pageIndex + 1}" loading="lazy" />`
     : `<div class="page-thumbnail placeholder">${getThumbnailPlaceholderText(documentState.thumbnailStatus)}</div>`;
 
-  return `${thumbnailMarkup}<strong>${pageIndex + 1}</strong><span>${isSelected ? "Included" : "Excluded"}</span>`;
+  return `${previewBadge}${thumbnailMarkup}<strong>${pageIndex + 1}</strong><span>${isSelected ? "Included" : "Excluded"}</span>`;
 }
 
 function setLargePreviewPage(documentState, pageIndex) {
