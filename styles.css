@@ -611,14 +611,6 @@ h1 {
   padding: 12px;
 }
 
-.settings-panel-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
 .file-card.is-dragging-file {
   opacity: 0.5;
 }
@@ -713,7 +705,8 @@ h1 {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .icon-button {
