@@ -242,7 +242,7 @@ function render() {
     attachFileDragHandlers(fileCard, documentState.id);
 
     fileCard.querySelector(".file-name").textContent = documentState.name;
-    fileCard.querySelector(".file-order-hint").textContent = `Merge order: file ${index + 1}`;
+    fileCard.querySelector(".file-order-hint").textContent = `#${index + 1}`;
     fileCard.querySelector(".file-meta").textContent = `${documentState.pageCount} pages • ${formatBytes(documentState.size)}`;
     fileCard.querySelector(".drag-handle").title = state.documents.length > 1
       ? "Drag to reorder file"

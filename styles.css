@@ -648,8 +648,9 @@ h1 {
 
 .file-meta {
   text-align: right;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   white-space: nowrap;
+  opacity: 0.85;
 }
 
 .settings-meta {
@@ -664,19 +665,19 @@ h1 {
 }
 
 .file-order-hint {
-  margin-top: 2px;
+  margin-top: 1px;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.74rem;
 }
 
 .file-card-header {
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .file-card-header h3 {
   margin: 0;
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   line-height: 1.05;
 }
 
